@@ -15,8 +15,8 @@ namespace ZootRP.Core
 
     public interface IReward
     {
-        long Money { get; set; }
-        long Exp { get; set; }
-        String Description { get; set; }
+        long Money { get; }
+        long Exp { get; }
+        String Description { get; }
     }
 }

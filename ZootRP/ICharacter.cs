@@ -8,7 +8,7 @@ namespace ZootRP.Core
 {
     public interface ICharacter
     {
-        string Name { get; set; }
-        ISpecies Species { get; set; }
+        string Name { get; }
+        ISpecies Species { get; }
     }
 }

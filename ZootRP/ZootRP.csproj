@@ -45,6 +45,7 @@
     <Compile Include="ILocation.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="IPlayerIdentifier.cs" />
+    <Compile Include="IResidence.cs" />
     <Compile Include="IReward.cs" />
     <Compile Include="ISpecies.cs" />
     <Compile Include="PlayerStats.cs" />

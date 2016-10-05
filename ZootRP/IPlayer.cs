@@ -12,22 +12,24 @@ namespace ZootRP.Core
     {
         event PlayerStateChange LevelUpEvent;
 
-        IPlayerIdentifier Identifier { get; set; }
-        ICharacter Character { get; set; }
-        IJob Job { get; set; }
+        IPlayerIdentifier Identifier { get; }
+        ICharacter Character { get; }
+        IJob Job { get; }
+        IResidence Residence { get; }
         
-        uint Health { get; set; }
-        uint Endurance { get; set; }
-        uint Dexterity { get; set; }
-        uint Ingenuity { get; set; }
-        uint Charisma { get; set; }
+        uint Health { get; }
+        uint Endurance { get; }
+        uint Dexterity { get; }
+        uint Ingenuity { get; }
+        uint Charisma { get; }
         
-        ulong Money { get; set; }
+        ulong Money { get; }
         
-        uint Level { get; set; }
-        ulong ExpToNextLevel { get; set; }
-        ulong LevelExp { get; set; }
+        uint Level { get; }
+        uint ExpToNextLevel { get; }
+        uint LevelExp { get; }
 
         void AwardExp(uint exp);
+        void AwardMoney(ulong money);
     }
 }

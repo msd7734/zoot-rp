@@ -37,3 +37,9 @@ Activities
  - Rarity (determines chance to appear)
  - Preconditions (job, stats, day of the week)
 
+ First task:
+  - Implement concrete player
+  - Test rewards
+  - Level up
+  - - stat up
+  - - report via event

@@ -8,7 +8,7 @@ namespace ZootRP.Core
 {
     public interface IPlayerIdentifier
     {
-        Guid Id { get; set; }
-        String CanonicalName { get; set; }
+        Guid Id { get; }
+        String CanonicalName { get; }
     }
 }

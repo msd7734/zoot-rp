@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace ZootRP.Core
 {
-    interface ILocation
+    public interface ILocation
     {
+        String Name { get; }
+        String Description { get; }
+        IList<IActivity> CurrentActivities { get; }
     }
 }

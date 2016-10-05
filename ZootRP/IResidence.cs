@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ZootRP.Core
 {
-    public interface IActivity
+    public interface IResidence : ILocation
     {
-
+        ILocation Location { get; }
     }
 }

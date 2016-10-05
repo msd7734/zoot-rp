@@ -8,10 +8,10 @@ namespace ZootRP.Core
 {
     public interface IJob
     {
-        string Name { get; set; }
-        string Description { get; set; }
+        string Name { get; }
+        string Description { get; }
 
-        IReward HighYield { get; set; }
-        IReward LowYield { get; set; }
+        IReward HighYield { get; }
+        IReward LowYield { get; }
     }
 }
