@@ -8,6 +8,6 @@ namespace ZootRP.Core
 {
     public interface ISpecies
     {
-        public string Name;
+        string Name { get; set; }
     }
 }
