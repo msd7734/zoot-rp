@@ -1,0 +1,39 @@
+Completely decouple the game data interactions from the Discord API and the database interaction.
+
+Goal: Generate a unique character for each Player. Player <=> Discord User is 1-to-1. The character has a few (2-3) daily activities with a high degree of randomness and variation to keep things interesting. The goal of the game is to eventually become the mayor.
+
+Player
+ - Uniqueness (enough elements to avoid having identical characters)
+ - Species of animal
+ - Set of stats
+ - - Health
+ - - Endurance
+ - - Dexterity
+ - - Ingenuity
+ - - Charisma
+ - Jobs of varying prerequisites ranging from none (easy to hold) to high (hard to hold/rare)
+ - Job level
+ - - determine income
+ - Character level
+ - - determine... stats?
+ - Reputation
+
+Job
+ - Prerequisites
+ - Yields
+ - - Job exp
+ - - Small amt character exp
+ - - Money
+ - - High/Low based on chosen daily effort
+ - Schedule?
+
+Location
+ - Set of random (and scheduled?) events
+ - Set of possible descriptors (weather, random events you notice, adjectives)
+
+Activities
+ - Work (on schedule)
+ - Random list of possible activities in locations presented each day
+ - Rarity (determines chance to appear)
+ - Preconditions (job, stats, day of the week)
+
