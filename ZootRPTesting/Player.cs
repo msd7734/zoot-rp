@@ -13,6 +13,8 @@ namespace ZootRPTesting
 
         public event PlayerStateChange LevelUpEvent;
 
+        #region Accessors
+
         public IPlayerIdentifier Identifier
         {
             get;
@@ -93,6 +95,8 @@ namespace ZootRPTesting
             private set;
         }
 
+        #endregion
+
         private static readonly int STAT_STARTING_MAX = 20;
 
         public Player(string name)
@@ -131,14 +135,14 @@ namespace ZootRPTesting
             stat = (uint) ((b1 ^ b2) % STAT_STARTING_MAX) + 1; 
         }
 
-        public void AwardExp(uint exp)
+        public void AwardLevelExp(uint exp)
         {
-            throw new NotImplementedException();
+            LevelExp += exp;
         }
 
         public void AwardMoney(ulong money)
         {
-            throw new NotImplementedException();
+            Money += money;
         }
     }
 }

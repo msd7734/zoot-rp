@@ -29,7 +29,7 @@ namespace ZootRP.Core
         uint ExpToNextLevel { get; }
         uint LevelExp { get; }
 
-        void AwardExp(uint exp);
+        void AwardLevelExp(uint exp);
         void AwardMoney(ulong money);
     }
 }

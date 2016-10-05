@@ -10,13 +10,13 @@ namespace ZootRP.Core
     public enum RewardType
     {
         Money,
-        Exp
+        LevelExp
     }
 
     public interface IReward
     {
         long Money { get; }
-        long Exp { get; }
+        long LevelExp { get; }
         String Description { get; }
     }
 }
