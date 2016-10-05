@@ -12,8 +12,11 @@ namespace ZootRPTesting
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(PlayerStats.ExpToNextLevel(3));
-
+            Player p = new Player("John");
+            var dict = PlayerStats.GetStatsDict(p);
+            foreach (var kv in dict) {
+                Console.WriteLine("{0}: {1}", kv.Key.ToString(), kv.Value);
+            }
             Console.ReadKey(true);
         }
     }

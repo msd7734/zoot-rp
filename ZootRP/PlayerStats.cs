@@ -25,9 +25,9 @@ namespace ZootRP.Core
             };
         }
 
-        public static ulong ExpToNextLevel(uint level)
+        public static uint ExpToNextLevel(uint level)
         {
-            return (level >= LEVEL_MAX) ? 0 : Convert.ToUInt64(((level * level) + (25 * level) + 200) - 1);
+            return (level >= LEVEL_MAX) ? 0 : ((level * level) + (25 * level) + 200) - 1;
         }
     }
 }
