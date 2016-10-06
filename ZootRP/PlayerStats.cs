@@ -13,6 +13,9 @@ namespace ZootRP.Core
         public static readonly uint LEVEL_MIN = 1;
         public static readonly uint LEVEL_MAX = 99;
 
+        public static readonly uint STAT_MIN = 1;
+        public static readonly uint STAT_MAX = 99;
+
         public static Dictionary<Stat,UInt32> GetStatsDict(IPlayer player)
         {
             return new Dictionary<Stat, UInt32>()

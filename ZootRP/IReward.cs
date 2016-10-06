@@ -52,6 +52,10 @@ namespace ZootRP.Core
         {
             Description = String.Empty;
             Type = typeFlags;
+
+            Money = 0;
+            LevelExp = 0;
+
             HandleRewardTypes(rewards);
         }
 
@@ -59,6 +63,10 @@ namespace ZootRP.Core
         {
             Description = description;
             Type = typeFlags;
+
+            Money = 0;
+            LevelExp = 0;
+
             HandleRewardTypes(rewards);
         }
 

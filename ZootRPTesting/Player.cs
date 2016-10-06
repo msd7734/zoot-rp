@@ -137,7 +137,8 @@ namespace ZootRPTesting
 
         public void GiveReward(IReward reward)
         {
-
+            AwardLevelExp(reward.LevelExp);
+            AwardMoney(reward.Money);
         }
 
         public void AwardLevelExp(uint exp)
