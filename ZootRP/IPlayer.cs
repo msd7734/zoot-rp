@@ -23,9 +23,9 @@ namespace ZootRP.Core
         uint Ingenuity { get; }
         uint Charisma { get; }
         
-        PlayerStats.Stat[] FastStats { get; }
-        PlayerStats.Stat[] SlowStats { get; }
-        PlayerStats.Stat[] AverageStats { get; }
+        PlayerStat[] FastStats { get; }
+        PlayerStat[] SlowStats { get; }
+        PlayerStat[] AverageStats { get; }
 
         ulong Money { get; }
         

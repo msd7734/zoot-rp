@@ -81,19 +81,19 @@ namespace ZootRPTesting
             private set;
         }
 
-        public PlayerStats.Stat[] FastStats
+        public PlayerStat[] FastStats
         {
             get;
             private set;
         }
 
-        public PlayerStats.Stat[] SlowStats
+        public PlayerStat[] SlowStats
         {
             get;
             private set;
         }
 
-        public PlayerStats.Stat[] AverageStats
+        public PlayerStat[] AverageStats
         {
             get;
             private set;
@@ -103,8 +103,15 @@ namespace ZootRPTesting
         {
             get
             {
-                uint toNext = PlayerStats.ExpToNextLevel(Level);
-                return (toNext > LevelExp) ? (toNext - LevelExp) : 0;
+                if (Level >= LEVEL_MAX)
+                {
+                    return 0;
+                }
+                else
+                {
+                    uint toNext = ((Level * Level) + (25 * Level) + 200) - 1;
+                    return (toNext > LevelExp) ? (toNext - LevelExp) : 0;
+                }
             }
         }
 
@@ -116,7 +123,13 @@ namespace ZootRPTesting
 
         #endregion
 
-        private static readonly int STAT_STARTING_MAX = 20;
+        private static readonly uint STAT_STARTING_MAX = 20;
+        private static readonly int STAT_LEVEL_MAX = 50;
+
+        private  static readonly uint LEVEL_MIN = 1;
+        private  static readonly uint LEVEL_MAX = 99;
+        private  static readonly uint STAT_MIN = 1;
+        private  static readonly uint STAT_MAX = 99;
 
         public Player(string name)
         {
@@ -141,13 +154,13 @@ namespace ZootRPTesting
 
             // use remaining bytes to determine something else?
 
-            var progressions = new List<List<PlayerStats.Stat>>()
+            var progressions = new List<List<PlayerStat>>()
             {
-                new List<PlayerStats.Stat>(),
-                new List<PlayerStats.Stat>(),
-                new List<PlayerStats.Stat>()
+                new List<PlayerStat>(),
+                new List<PlayerStat>(),
+                new List<PlayerStat>()
             };
-            var statsDict = PlayerStats.GetStatsDict(this);
+            var statsDict = PlayerUtil.GetStatsDict(this);
             var keys = statsDict.Keys.ToArray();
             for (int i = 0; i < keys.Length; ++i)
             {

@@ -15,7 +15,7 @@ namespace ZootRPTesting
         static void Main(string[] args)
         {
             Player p = new Player("John");
-            var dict = PlayerStats.GetStatsDict(p);
+            var dict = PlayerUtil.GetStatsDict(p);
             foreach (var kv in dict) {
                 Console.WriteLine("{0}: {1}", kv.Key.ToString(), kv.Value);
             }
@@ -24,7 +24,7 @@ namespace ZootRPTesting
             Console.WriteLine("Slow stat progressions: {0}", String.Join(",", p.SlowStats));
             Console.WriteLine("Average stat progressions: {0}", String.Join(",", p.AverageStats));
 
-            // double neutralStat = (double) PlayerStats.GetStat(p.AverageStats[0], p);
+            // double neutralStat = (double) PlayerUtil.GetStat(p.AverageStats[0], p);
 
             double neutralStat = 20.0;
             Console.WriteLine("Given stat: {0}", neutralStat);
