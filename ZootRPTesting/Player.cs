@@ -81,6 +81,24 @@ namespace ZootRPTesting
             private set;
         }
 
+        public PlayerStats.Stat[] FastStats
+        {
+            get;
+            private set;
+        }
+
+        public PlayerStats.Stat[] SlowStats
+        {
+            get;
+            private set;
+        }
+
+        public PlayerStats.Stat[] NeutralStats
+        {
+            get;
+            private set;
+        }
+
         public uint ExpToNextLevel
         {
             get
@@ -113,26 +131,36 @@ namespace ZootRPTesting
         {
             // Get a 16-byte array from guid
             byte[] seed = Identifier.Id.ToByteArray();
-            uint health, endurance, ingenuity, dexterity, charisma;
 
-            StatFromSeeds(seed[0], seed[1], out health);
-            StatFromSeeds(seed[2], seed[3], out endurance);
-            StatFromSeeds(seed[4], seed[5], out ingenuity);
-            StatFromSeeds(seed[6], seed[7], out dexterity);
-            StatFromSeeds(seed[8], seed[9], out charisma);
+            Health = StatFromSeeds(seed[0], seed[1]);
+            Endurance = StatFromSeeds(seed[2], seed[3]);
+            Dexterity = StatFromSeeds(seed[4], seed[5]);
+            Ingenuity = StatFromSeeds(seed[6], seed[7]);
+            Charisma = StatFromSeeds(seed[8], seed[9]);
 
-            // use remaining bytes to determine something else? 
+            // use remaining bytes to determine something else?
 
-            Health = health;
-            Endurance = endurance;
-            Ingenuity = ingenuity;
-            Dexterity = dexterity;
-            Charisma = charisma;
+            var progressions = new List<List<PlayerStats.Stat>>()
+            {
+                new List<PlayerStats.Stat>(),
+                new List<PlayerStats.Stat>(),
+                new List<PlayerStats.Stat>()
+            };
+            var statsDict = PlayerStats.GetStatsDict(this);
+            var keys = statsDict.Keys.ToArray();
+            for (int i = 0; i < keys.Length; ++i)
+            {
+                progressions[seed[i] % 3].Add(keys[i]);
+            }
+
+            FastStats = progressions[0].ToArray();
+            SlowStats = progressions[1].ToArray();
+            NeutralStats = progressions[2].ToArray();
         }
 
-        private void StatFromSeeds(byte b1, byte b2, out uint stat)
+        private uint StatFromSeeds(byte b1, byte b2)
         {
-            stat = (uint) ((b1 ^ b2) % STAT_STARTING_MAX) + 1; 
+            return (uint) ((b1 ^ b2) % STAT_STARTING_MAX) + 1;
         }
 
         public void GiveReward(IReward reward)

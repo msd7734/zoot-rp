@@ -18,7 +18,9 @@ namespace ZootRPTesting
                 Console.WriteLine("{0}: {1}", kv.Key.ToString(), kv.Value);
             }
 
-            
+            Console.WriteLine("Fast stat progressions: {0}", String.Join(",", p.FastStats));
+            Console.WriteLine("Slow stat progressions: {0}", String.Join(",", p.SlowStats));
+            Console.WriteLine("Average stat progressions: {0}", String.Join(",", p.NeutralStats));
 
             Console.ReadKey(true);
         }
