@@ -93,7 +93,7 @@ namespace ZootRPTesting
             private set;
         }
 
-        public PlayerStats.Stat[] NeutralStats
+        public PlayerStats.Stat[] AverageStats
         {
             get;
             private set;
@@ -103,7 +103,8 @@ namespace ZootRPTesting
         {
             get
             {
-                return PlayerStats.ExpToNextLevel(Level);
+                uint toNext = PlayerStats.ExpToNextLevel(Level);
+                return (toNext > LevelExp) ? (toNext - LevelExp) : 0;
             }
         }
 
@@ -155,7 +156,7 @@ namespace ZootRPTesting
 
             FastStats = progressions[0].ToArray();
             SlowStats = progressions[1].ToArray();
-            NeutralStats = progressions[2].ToArray();
+            AverageStats = progressions[2].ToArray();
         }
 
         private uint StatFromSeeds(byte b1, byte b2)

@@ -16,21 +16,52 @@ namespace ZootRP.Core
         public static readonly uint STAT_MIN = 1;
         public static readonly uint STAT_MAX = 99;
 
+        private static Dictionary<IPlayer, Dictionary<Stat, UInt32>> GeneratedStats =
+            new Dictionary<IPlayer, Dictionary<Stat, UInt32>>();
+
         public static Dictionary<Stat,UInt32> GetStatsDict(IPlayer player)
         {
-            return new Dictionary<Stat, UInt32>()
+            try
             {
-                { Stat.Health, player.Health },
-                { Stat.Endurance, player.Endurance },
-                { Stat.Dexterity, player.Dexterity },
-                { Stat.Ingenuity, player.Ingenuity },
-                { Stat.Charisma, player.Charisma }
-            };
+                return GeneratedStats[player];
+            }
+            catch(KeyNotFoundException knfe)
+            {
+                var newStatsDict = new Dictionary<Stat, UInt32>()
+                {
+                    { Stat.Health, player.Health },
+                    { Stat.Endurance, player.Endurance },
+                    { Stat.Dexterity, player.Dexterity },
+                    { Stat.Ingenuity, player.Ingenuity },
+                    { Stat.Charisma, player.Charisma }
+                };
+
+                GeneratedStats.Add(player, newStatsDict);
+
+                return newStatsDict;
+            }
+            
         }
 
-        public static uint ExpToNextLevel(uint level)
+        public static uint GetStat(Stat stat, IPlayer player)
         {
-            return (level >= LEVEL_MAX) ? 0 : ((level * level) + (25 * level) + 200) - 1;
+            Dictionary<Stat,UInt32> statsDict;
+
+            try
+            {
+                statsDict = GeneratedStats[player];
+            }
+            catch (KeyNotFoundException knfe)
+            {
+                statsDict = GetStatsDict(player);
+            }
+
+            return statsDict[stat];
+        }
+
+        public static uint ExpToNextLevel(uint currentLevel)
+        {
+            return (currentLevel >= LEVEL_MAX) ? 0 : ((currentLevel * currentLevel) + (25 * currentLevel) + 200) - 1;
         }
     }
 }

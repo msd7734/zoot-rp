@@ -25,7 +25,7 @@ namespace ZootRP.Core
         
         PlayerStats.Stat[] FastStats { get; }
         PlayerStats.Stat[] SlowStats { get; }
-        PlayerStats.Stat[] NeutralStats { get; }
+        PlayerStats.Stat[] AverageStats { get; }
 
         ulong Money { get; }
         
