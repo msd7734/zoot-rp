@@ -17,6 +17,9 @@ namespace ZootRPTesting
             foreach (var kv in dict) {
                 Console.WriteLine("{0}: {1}", kv.Key.ToString(), kv.Value);
             }
+
+            
+
             Console.ReadKey(true);
         }
     }

@@ -135,6 +135,11 @@ namespace ZootRPTesting
             stat = (uint) ((b1 ^ b2) % STAT_STARTING_MAX) + 1; 
         }
 
+        public void GiveReward(IReward reward)
+        {
+
+        }
+
         public void AwardLevelExp(uint exp)
         {
             LevelExp += exp;

@@ -29,6 +29,7 @@ namespace ZootRP.Core
         uint ExpToNextLevel { get; }
         uint LevelExp { get; }
 
+        void GiveReward(IReward reward);
         void AwardLevelExp(uint exp);
         void AwardMoney(ulong money);
     }
