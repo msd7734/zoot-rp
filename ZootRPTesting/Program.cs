@@ -26,23 +26,38 @@ namespace ZootRPTesting
 
             // double neutralStat = (double) PlayerUtil.GetStat(p.AverageStats[0], p);
 
-            double neutralStat = 20.0;
+            double neutralStat = 15.0;
             Console.WriteLine("Given stat: {0}", neutralStat);
 
-            double diff = 99.0 - neutralStat;
-            double levelReachMax = (diff + 1) - (double) Math.Floor(neutralStat / 5);
+            
 
-            double[] domain = { 1.0, levelReachMax / 4.0, levelReachMax / 2.0, (3.0*levelReachMax) / 4.0, levelReachMax };
-            double[] range = { neutralStat, diff/4.0, diff/2.0, diff/1.5, 99.0 };
+            // double diff = MAX_STAT - neutralStat;
+            // double levelReachMax = (diff + 1) - (double) Math.Floor(neutralStat / 5);
 
-            Func<double, double> n = Fit.PolynomialFunc(domain, range, 2);
+            // fast, reaches 50 naturally by 25
+            // avg, reaches 50 naturally by 50
+            // slow, reaches 50 naturally by 75
+
+            double MAX_LEVEL = 100.0;
+            double MAX_STAT = 50.0;
+
+            double targetLvl = 50;
+
+            // double[] domain = { 1.0, targetLvl / 4, targetLvl / 2, (3 * targetLvl) / 4, targetLvl };
+            // double[] range = { neutralStat, MAX_STAT/4, MAX_STAT / 2, (3*MAX_STAT)/4, MAX_STAT };
+
+            double[] domain = { 1.0, targetLvl };
+            double[] range = { neutralStat, MAX_STAT};
+
+            Func<double, double> n = Fit.LineFunc(domain, range);
             //Console.WriteLine("{0} stat at levels:", p.AverageStats[0].ToString());
-            Console.WriteLine("2 => {0}", n(2));
+            Console.WriteLine("1 => {0}", n(1));
+            Console.WriteLine("5 => {0}", n(5));
+            Console.WriteLine("10 => {0}", n(10));
+            Console.WriteLine("15 => {0}", n(15));
             Console.WriteLine("20 => {0}", n(20));
-            Console.WriteLine("40 => {0}", n(40));
-            Console.WriteLine("60 => {0}", n(65));
-            Console.WriteLine("80 => {0}", n(80));
-            Console.WriteLine("Hit max at {1} => {0}", n(levelReachMax), levelReachMax);
+            Console.WriteLine("25 => {0}", n(25));
+            Console.WriteLine("{1} => {0}", n(targetLvl), targetLvl);
 
             Console.ReadKey(true);
         }

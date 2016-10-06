@@ -124,12 +124,12 @@ namespace ZootRPTesting
         #endregion
 
         private static readonly uint STAT_STARTING_MAX = 20;
-        private static readonly int STAT_LEVEL_MAX = 50;
+        private static readonly uint STAT_LEVEL_MAX = 50;
+        private static readonly uint STAT_MIN = 1;
+        private static readonly uint STAT_MAX = 100;
 
         private  static readonly uint LEVEL_MIN = 1;
         private  static readonly uint LEVEL_MAX = 99;
-        private  static readonly uint STAT_MIN = 1;
-        private  static readonly uint STAT_MAX = 99;
 
         public Player(string name)
         {
@@ -181,16 +181,39 @@ namespace ZootRPTesting
         {
             AwardLevelExp(reward.LevelExp);
             AwardMoney(reward.Money);
+            HandleLevelUp();
         }
 
         public void AwardLevelExp(uint exp)
         {
             LevelExp += exp;
+            HandleLevelUp();
         }
 
         public void AwardMoney(ulong money)
         {
             Money += money;
+        }
+
+        private void HandleLevelUp()
+        {
+            if (ExpToNextLevel == 0 && Level < LEVEL_MAX)
+            {
+                // rollover exp
+                uint oldExp = LevelExp;
+                LevelExp = 0;
+                uint rollover = oldExp - ExpToNextLevel;
+                LevelExp = rollover;
+
+                Level += 1;
+
+                LevelUpStats(Level - 1);
+            }
+        }
+
+        private void LevelUpStats(uint previousLevel)
+        {
+            
         }
     }
 }

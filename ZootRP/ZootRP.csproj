@@ -55,7 +55,6 @@
     <Compile Include="IResidence.cs" />
     <Compile Include="IReward.cs" />
     <Compile Include="ISpecies.cs" />
-    <Compile Include="PlayerStats.cs" />
     <Compile Include="PlayerUpdateEventArgs.cs" />
     <Compile Include="PlayerUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
