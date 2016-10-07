@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace ZootRP.Core
 {
+    // maybe allow these to be extended somehow
     public enum ProgressionRate
     {
+        Default,
         Slow,
         Average,
         Fast

@@ -52,6 +52,7 @@
     <Compile Include="ILocation.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="IPlayerIdentifier.cs" />
+    <Compile Include="ProgressiveData.cs" />
     <Compile Include="IProgression.cs" />
     <Compile Include="IResidence.cs" />
     <Compile Include="IReward.cs" />

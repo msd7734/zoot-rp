@@ -12,28 +12,36 @@ namespace ZootRP.Core
     {
         event PlayerStateChange LevelUpEvent;
 
+        // Main data objects that 
         IPlayerIdentifier Identifier { get; }
         ICharacter Character { get; }
         IJob Job { get; }
         IResidence Residence { get; }
         
-        uint Health { get; }
-        uint Endurance { get; }
-        uint Dexterity { get; }
-        uint Ingenuity { get; }
-        uint Charisma { get; }
+        // Player stats wrapped in their advancement functions
+        ProgressiveData<uint> Health { get; }
+        ProgressiveData<uint> Endurance { get; }
+        ProgressiveData<uint> Dexterity { get; }
+        ProgressiveData<uint> Ingenuity { get; }
+        ProgressiveData<uint> Charisma { get; }
 
+        // I think the interface doesn't need to guarantee the use of an IProgression?
+        // If that's the case, why have it in Core, though...
 
-
-        PlayerStat[] FastStats { get; }
-        PlayerStat[] SlowStats { get; }
-        PlayerStat[] AverageStats { get; }
+        // IGrowable<T> interface that gives IProgression GetProgression()
+        // This can then be applied to a wrapper class of a stat
 
         ulong Money { get; }
         
         uint Level { get; }
         uint ExpToNextLevel { get; }
         uint LevelExp { get; }
+
+        uint GetHealth();
+        uint GetEndurance();
+        uint GetDexterity();
+        uint GetIngenuity();
+        uint GetCharisma();
 
         void GiveReward(IReward reward);
         void AwardLevelExp(uint exp);

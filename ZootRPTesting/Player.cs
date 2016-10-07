@@ -39,31 +39,31 @@ namespace ZootRPTesting
             private set;
         }
 
-        public uint Health
+        public ProgressiveData<uint> Health
         {
             get;
             private set;
         }
 
-        public uint Endurance
+        public ProgressiveData<uint> Endurance
         {
             get;
             private set;
         }
 
-        public uint Dexterity
+        public ProgressiveData<uint> Dexterity
         {
             get;
             private set;
         }
 
-        public uint Ingenuity
+        public ProgressiveData<uint> Ingenuity
         {
             get;
             private set;
         }
 
-        public uint Charisma
+        public ProgressiveData<uint> Charisma
         {
             get;
             private set;
@@ -76,24 +76,6 @@ namespace ZootRPTesting
         }
 
         public uint Level
-        {
-            get;
-            private set;
-        }
-
-        public PlayerStat[] FastStats
-        {
-            get;
-            private set;
-        }
-
-        public PlayerStat[] SlowStats
-        {
-            get;
-            private set;
-        }
-
-        public PlayerStat[] AverageStats
         {
             get;
             private set;
@@ -130,6 +112,13 @@ namespace ZootRPTesting
         public static readonly uint LEVEL_MIN = 1;
         public static readonly uint LEVEL_MAX = 100;
 
+        private static ProgressionRate[] PROGRESSION_RATES =
+        {
+                ProgressionRate.Fast,
+                ProgressionRate.Slow,
+                ProgressionRate.Average
+        };
+
         public Player(string name)
         {
             Identifier = new PlayerIdentifier(Guid.NewGuid(), name);
@@ -144,36 +133,78 @@ namespace ZootRPTesting
         {
             // Get a 16-byte array from guid
             byte[] seed = Identifier.Id.ToByteArray();
+            uint health, end, dex, ing, chr;
 
-            Health = StatFromSeeds(seed[0], seed[1]);
-            Endurance = StatFromSeeds(seed[2], seed[3]);
-            Dexterity = StatFromSeeds(seed[4], seed[5]);
-            Ingenuity = StatFromSeeds(seed[6], seed[7]);
-            Charisma = StatFromSeeds(seed[8], seed[9]);
+            // Starting values of stats
+            health = StatFromSeeds(seed[0], seed[1]);
+            end = StatFromSeeds(seed[2], seed[3]);
+            dex = StatFromSeeds(seed[4], seed[5]);
+            ing = StatFromSeeds(seed[6], seed[7]);
+            chr = StatFromSeeds(seed[8], seed[9]);
+
+            // set randomized progression rates for each stat
+            Health = new ProgressiveData<uint>
+            (
+                health,
+                new StatProgression(health, STAT_MAX, ProgressRateFromSeed(seed[0]))
+            );
+
+            Endurance = new ProgressiveData<uint>
+            (
+                end,
+                new StatProgression(end, STAT_MAX, ProgressRateFromSeed(seed[1]))
+            );
+
+            Dexterity = new ProgressiveData<uint>
+            (
+                dex,
+                new StatProgression(dex, STAT_MAX, ProgressRateFromSeed(seed[2]))
+            );
+
+            Ingenuity = new ProgressiveData<uint>
+            (
+                ing,
+                new StatProgression(ing, STAT_MAX, ProgressRateFromSeed(seed[3]))
+            );
+
+            Charisma = new ProgressiveData<uint>
+            (
+                chr,
+                new StatProgression(chr, STAT_MAX, ProgressRateFromSeed(seed[4]))
+            );
 
             // use remaining bytes to determine something else?
-
-            var progressions = new List<List<PlayerStat>>()
-            {
-                new List<PlayerStat>(),
-                new List<PlayerStat>(),
-                new List<PlayerStat>()
-            };
-            var statsDict = PlayerUtil.GetStatsDict(this);
-            var keys = statsDict.Keys.ToArray();
-            for (int i = 0; i < keys.Length; ++i)
-            {
-                progressions[seed[i] % 3].Add(keys[i]);
-            }
-
-            FastStats = progressions[0].ToArray();
-            SlowStats = progressions[1].ToArray();
-            AverageStats = progressions[2].ToArray();
         }
 
         private uint StatFromSeeds(byte b1, byte b2)
         {
             return (uint) ((b1 ^ b2) % STAT_STARTING_MAX) + 1;
+        }
+
+        private static ProgressionRate ProgressRateFromSeed(byte seed)
+        {
+            return PROGRESSION_RATES[seed % PROGRESSION_RATES.Length];
+        }
+
+        public uint GetHealth()
+        {
+            return Health.Value;
+        }
+        public uint GetEndurance()
+        {
+            return Endurance.Value;
+        }
+        public uint GetDexterity()
+        {
+            return Dexterity.Value;
+        }
+        public uint GetIngenuity()
+        {
+            return Ingenuity.Value;
+        }
+        public uint GetCharisma()
+        {
+            return Charisma.Value;
         }
 
         public void GiveReward(IReward reward)

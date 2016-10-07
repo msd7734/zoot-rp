@@ -14,11 +14,11 @@ namespace ZootRP.Core
         {
             return new Dictionary<PlayerStat, UInt32>()
             {
-                { PlayerStat.Health, player.Health },
-                { PlayerStat.Endurance, player.Endurance },
-                { PlayerStat.Dexterity, player.Dexterity },
-                { PlayerStat.Ingenuity, player.Ingenuity },
-                { PlayerStat.Charisma, player.Charisma }
+                { PlayerStat.Health, player.GetHealth() },
+                { PlayerStat.Endurance, player.GetEndurance() },
+                { PlayerStat.Dexterity, player.GetDexterity() },
+                { PlayerStat.Ingenuity, player.GetIngenuity() },
+                { PlayerStat.Charisma, player.GetCharisma() }
             };
 
         }
