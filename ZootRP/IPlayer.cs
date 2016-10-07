@@ -34,14 +34,16 @@ namespace ZootRP.Core
         ulong Money { get; }
         
         uint Level { get; }
-        uint ExpToNextLevel { get; }
-        uint LevelExp { get; }
+        ProgressiveData<uint> LevelExp { get; }
 
         uint GetHealth();
         uint GetEndurance();
         uint GetDexterity();
         uint GetIngenuity();
         uint GetCharisma();
+        uint GetLevelExp();
+
+        uint ExpToNextLevel();
 
         void GiveReward(IReward reward);
         void AwardLevelExp(uint exp);

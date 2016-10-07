@@ -8,10 +8,10 @@ namespace ZootRP.Core
 {
     public class ProgressiveData<T>
     {
-        public IProgression Progression { get; private set; }
-        public T Value { get; private set; }
+        public IProgression<T> Progression { get; private set; }
+        public T Value { get; set; }
 
-        public ProgressiveData(T value, IProgression progression)
+        public ProgressiveData(T value, IProgression<T> progression)
         {
             Value = value;
             Progression = progression;

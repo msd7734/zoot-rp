@@ -15,11 +15,11 @@ namespace ZootRP.Core
         Fast
     }
 
-    public interface IProgression
+    public interface IProgression<T>
     {
         ProgressionRate Rate { get; }
-        double Min { get; }
-        double Max { get; }
-        double ValueAt(double x);
+        T Min { get; }
+        T Max { get; }
+        T ValueAt(T x);
     }
 }

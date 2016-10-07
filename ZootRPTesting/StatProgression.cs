@@ -10,7 +10,7 @@ using ZootRP.Core;
 
 namespace ZootRPTesting
 {
-    public class StatProgression : IProgression
+    public class StatProgression : IProgression<uint>
     {
         public ProgressionRate Rate
         {
@@ -18,13 +18,13 @@ namespace ZootRPTesting
             private set;
         }
 
-        public double Min
+        public uint Min
         {
             get;
             private set;
         }
 
-        public double Max
+        public uint Max
         {
             get;
             private set;
@@ -36,7 +36,7 @@ namespace ZootRPTesting
 
         private Func<double, double> _linearFunc;
 
-        public StatProgression(double startStat, double maxStat, ProgressionRate rate)
+        public StatProgression(uint startStat, uint maxStat, ProgressionRate rate)
         {
             Min = startStat;
             Max = maxStat;
@@ -55,7 +55,7 @@ namespace ZootRPTesting
                     targetLevel = MAXOUT_SLOW;
                     break;
                 default:
-                    targetLevel = (double) Player.LEVEL_MAX;
+                    targetLevel = Player.LEVEL_MAX;
                     break;
             }
 
@@ -68,9 +68,9 @@ namespace ZootRPTesting
             this._linearFunc = Fit.LineFunc(x, y);
         }
 
-        public double ValueAt(double level)
+        public uint ValueAt(uint level)
         {
-            return this._linearFunc(level);
+            return (uint) this._linearFunc(level);
         }
     }
 }

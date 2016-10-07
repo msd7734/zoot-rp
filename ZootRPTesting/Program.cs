@@ -20,6 +20,10 @@ namespace ZootRPTesting
                 Console.WriteLine("{0}: {1}", kv.Key.ToString(), kv.Value);
             }
 
+            var h = p.Health;
+            h.Value = 20;
+            Console.WriteLine("New health?: {0}", p.GetHealth());
+
             /*
             Console.WriteLine("Fast stat progressions: {0}", String.Join(",", p.FastStats));
             Console.WriteLine("Slow stat progressions: {0}", String.Join(",", p.SlowStats));

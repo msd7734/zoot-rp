@@ -41,32 +41,74 @@ namespace ZootRPTesting
 
         public ProgressiveData<uint> Health
         {
-            get;
-            private set;
+            get
+            {
+                return CopyProgData(this._health);
+            }
+            private set
+            {
+                this._health = value;
+            }
         }
 
         public ProgressiveData<uint> Endurance
         {
-            get;
-            private set;
+            get
+            {
+                return CopyProgData(this._endurance);
+            }
+            private set
+            {
+                this._endurance = value;
+            }
         }
 
         public ProgressiveData<uint> Dexterity
         {
-            get;
-            private set;
+            get
+            {
+                return CopyProgData(this._dexterity);
+            }
+            private set
+            {
+                this._dexterity = value;
+            }
         }
 
         public ProgressiveData<uint> Ingenuity
         {
-            get;
-            private set;
+            get
+            {
+                return CopyProgData(this._ingenuity);
+            }
+            private set
+            {
+                this._ingenuity = value;
+            }
         }
 
         public ProgressiveData<uint> Charisma
         {
-            get;
-            private set;
+            get
+            {
+                return CopyProgData(this._charisma);
+            }
+            private set
+            {
+                this._charisma = value;
+            }
+        }
+
+        public ProgressiveData<uint> LevelExp
+        {
+            get
+            {
+                return CopyProgData(this._levelExp);
+            }
+            private set
+            {
+                this._levelExp = value;
+            }
         }
 
         public ulong Money
@@ -76,28 +118,6 @@ namespace ZootRPTesting
         }
 
         public uint Level
-        {
-            get;
-            private set;
-        }
-
-        public uint ExpToNextLevel
-        {
-            get
-            {
-                if (Level >= LEVEL_MAX)
-                {
-                    return 0;
-                }
-                else
-                {
-                    uint toNext = ((Level * Level) + (25 * Level) + 200) - 1;
-                    return (toNext > LevelExp) ? (toNext - LevelExp) : 0;
-                }
-            }
-        }
-
-        public uint LevelExp
         {
             get;
             private set;
@@ -119,11 +139,18 @@ namespace ZootRPTesting
                 ProgressionRate.Average
         };
 
+        private ProgressiveData<uint> _health;
+        private ProgressiveData<uint> _endurance;
+        private ProgressiveData<uint> _dexterity;
+        private ProgressiveData<uint> _ingenuity;
+        private ProgressiveData<uint> _charisma;
+        private ProgressiveData<uint> _levelExp;
+
         public Player(string name)
         {
             Identifier = new PlayerIdentifier(Guid.NewGuid(), name);
             Level = 1;
-            LevelExp = 0;
+            this._levelExp = new ProgressiveData<uint>(0, new LevelExpProgression());
             Money = 20;
 
             GenerateStats();
@@ -143,31 +170,31 @@ namespace ZootRPTesting
             chr = StatFromSeeds(seed[8], seed[9]);
 
             // set randomized progression rates for each stat
-            Health = new ProgressiveData<uint>
+            this._health = new ProgressiveData<uint>
             (
                 health,
                 new StatProgression(health, STAT_MAX, ProgressRateFromSeed(seed[0]))
             );
 
-            Endurance = new ProgressiveData<uint>
+            this._endurance = new ProgressiveData<uint>
             (
                 end,
                 new StatProgression(end, STAT_MAX, ProgressRateFromSeed(seed[1]))
             );
 
-            Dexterity = new ProgressiveData<uint>
+            this._dexterity = new ProgressiveData<uint>
             (
                 dex,
                 new StatProgression(dex, STAT_MAX, ProgressRateFromSeed(seed[2]))
             );
 
-            Ingenuity = new ProgressiveData<uint>
+            this._ingenuity = new ProgressiveData<uint>
             (
                 ing,
                 new StatProgression(ing, STAT_MAX, ProgressRateFromSeed(seed[3]))
             );
 
-            Charisma = new ProgressiveData<uint>
+            this._charisma = new ProgressiveData<uint>
             (
                 chr,
                 new StatProgression(chr, STAT_MAX, ProgressRateFromSeed(seed[4]))
@@ -188,23 +215,45 @@ namespace ZootRPTesting
 
         public uint GetHealth()
         {
-            return Health.Value;
+            return this._health.Value;
         }
+
         public uint GetEndurance()
         {
-            return Endurance.Value;
+            return this._endurance.Value;
         }
+
         public uint GetDexterity()
         {
-            return Dexterity.Value;
+            return this._dexterity.Value;
         }
+
         public uint GetIngenuity()
         {
-            return Ingenuity.Value;
+            return this._ingenuity.Value;
         }
+
         public uint GetCharisma()
         {
-            return Charisma.Value;
+            return this._charisma.Value;
+        }
+
+        public uint GetLevelExp()
+        {
+            return this._levelExp.Value;
+        }
+
+        public uint ExpToNextLevel()
+        {
+            if (Level >= LEVEL_MAX)
+            {
+                return 0;
+            }
+            else
+            {
+                uint toNext = LevelExp.Progression.ValueAt(Level);
+                return (toNext > GetLevelExp()) ? (toNext - GetLevelExp()) : 0;
+            }
         }
 
         public void GiveReward(IReward reward)
@@ -216,7 +265,7 @@ namespace ZootRPTesting
 
         public void AwardLevelExp(uint exp)
         {
-            LevelExp += exp;
+            this._levelExp.Value += exp;
             HandleLevelUp();
         }
 
@@ -227,13 +276,13 @@ namespace ZootRPTesting
 
         private void HandleLevelUp()
         {
-            if (ExpToNextLevel == 0 && Level < LEVEL_MAX)
+            if (ExpToNextLevel() == 0 && Level < LEVEL_MAX)
             {
                 // rollover exp
-                uint oldExp = LevelExp;
-                LevelExp = 0;
-                uint rollover = oldExp - ExpToNextLevel;
-                LevelExp = rollover;
+                uint oldExp = LevelExp.Value;
+                this._levelExp.Value = 0;
+                uint rollover = oldExp - ExpToNextLevel();
+                this._levelExp.Value = rollover;
 
                 Level += 1;
 
@@ -244,6 +293,11 @@ namespace ZootRPTesting
         private void LevelUpStats(uint previousLevel)
         {
             
+        }
+
+        private ProgressiveData<uint> CopyProgData(ProgressiveData<uint> obj)
+        {
+            return new ProgressiveData<uint>(obj.Value, obj.Progression);
         }
     }
 }
