@@ -29,7 +29,7 @@ namespace ZootRPTesting
 
             double neutralStat = 15.0;
             Console.WriteLine("Given stat: {0}", neutralStat);
-
+            */
             
 
             // double diff = MAX_STAT - neutralStat;
@@ -39,10 +39,14 @@ namespace ZootRPTesting
             // avg, reaches 50 naturally by 50
             // slow, reaches 50 naturally by 75
 
+            /*
             double MAX_LEVEL = 100.0;
             double MAX_STAT = 50.0;
 
-            double targetLvl = 50;
+            double targetLvl = 25;
+
+            double neutralStat = 15.0;
+            Console.WriteLine("Given stat: {0}", neutralStat);
 
             // double[] domain = { 1.0, targetLvl / 4, targetLvl / 2, (3 * targetLvl) / 4, targetLvl };
             // double[] range = { neutralStat, MAX_STAT/4, MAX_STAT / 2, (3*MAX_STAT)/4, MAX_STAT };

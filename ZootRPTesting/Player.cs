@@ -123,12 +123,12 @@ namespace ZootRPTesting
 
         #endregion
 
-        private static readonly uint STAT_STARTING_MAX = 20;
-        private static readonly uint STAT_MIN = 1;
-        private static readonly uint STAT_MAX = 100;
-
-        private  static readonly uint LEVEL_MIN = 1;
-        private  static readonly uint LEVEL_MAX = 100;
+        public static readonly uint STAT_STARTING_MAX = 20;
+        public static readonly uint STAT_MIN = 1;
+        public static readonly uint STAT_MAX = 100;
+        
+        public static readonly uint LEVEL_MIN = 1;
+        public static readonly uint LEVEL_MAX = 100;
 
         public Player(string name)
         {

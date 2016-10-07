@@ -30,38 +30,47 @@ namespace ZootRPTesting
             private set;
         }
 
-        private static double START_LVL = 1;
+        public static readonly double MAXOUT_FAST = 25;
+        public static readonly double MAXOUT_AVERAGE = 50;
+        public static readonly double MAXOUT_SLOW = 75;
 
         private Func<double, double> _linearFunc;
 
         public StatProgression(double startStat, double maxStat, ProgressionRate rate)
         {
+            Min = startStat;
+            Max = maxStat;
+
             double targetLevel;
 
             switch (rate)
             {
                 case ProgressionRate.Fast:
-                    targetLevel = 25.0;
+                    targetLevel = MAXOUT_FAST;
                     break;
                 case ProgressionRate.Average:
-                    targetLevel = 50.0;
+                    targetLevel = MAXOUT_AVERAGE;
                     break;
                 case ProgressionRate.Slow:
-                    targetLevel = 75.0;
+                    targetLevel = MAXOUT_SLOW;
                     break;
                 default:
-                    targetLevel = 100.0;
+                    targetLevel = (double) Player.LEVEL_MAX;
                     break;
             }
 
-            double[] x = { START_LVL, targetLevel };
+            // shift function so that the higher starting stats reach levelMax faster
+            // use equivalent ratio to (stat / MAX_LEVEL_STAT)
+            // so: targetLevel * (stat / MAX_LEVEL_STAT)
+
+            double[] x = { (double) Player.LEVEL_MIN, targetLevel };
             double[] y = { startStat, maxStat };
             this._linearFunc = Fit.LineFunc(x, y);
         }
 
-        public double ValueAt(double x)
+        public double ValueAt(double level)
         {
-            return this._linearFunc(x);
+            return this._linearFunc(level);
         }
     }
 }

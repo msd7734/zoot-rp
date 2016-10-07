@@ -23,9 +23,7 @@ namespace ZootRP.Core
         uint Ingenuity { get; }
         uint Charisma { get; }
 
-        Dictionary<PlayerStat, IProgression> FastStats { get; }
-        Dictionary<PlayerStat, IProgression> SlowStats { get; }
-        Dictionary<PlayerStat, IProgression> AverageStats { get; }
+
 
         PlayerStat[] FastStats { get; }
         PlayerStat[] SlowStats { get; }
