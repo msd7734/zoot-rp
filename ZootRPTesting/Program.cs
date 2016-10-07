@@ -20,6 +20,7 @@ namespace ZootRPTesting
                 Console.WriteLine("{0}: {1}", kv.Key.ToString(), kv.Value);
             }
 
+            /*
             Console.WriteLine("Fast stat progressions: {0}", String.Join(",", p.FastStats));
             Console.WriteLine("Slow stat progressions: {0}", String.Join(",", p.SlowStats));
             Console.WriteLine("Average stat progressions: {0}", String.Join(",", p.AverageStats));
@@ -58,7 +59,7 @@ namespace ZootRPTesting
             Console.WriteLine("20 => {0}", n(20));
             Console.WriteLine("25 => {0}", n(25));
             Console.WriteLine("{1} => {0}", n(targetLvl), targetLvl);
-
+            */
             Console.ReadKey(true);
         }
     }
