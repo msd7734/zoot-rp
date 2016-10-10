@@ -39,78 +39,6 @@ namespace ZootRPTesting
             private set;
         }
 
-        public ProgressiveData<uint> Health
-        {
-            get
-            {
-                return CopyProgData(this._health);
-            }
-            private set
-            {
-                this._health = value;
-            }
-        }
-
-        public ProgressiveData<uint> Endurance
-        {
-            get
-            {
-                return CopyProgData(this._endurance);
-            }
-            private set
-            {
-                this._endurance = value;
-            }
-        }
-
-        public ProgressiveData<uint> Dexterity
-        {
-            get
-            {
-                return CopyProgData(this._dexterity);
-            }
-            private set
-            {
-                this._dexterity = value;
-            }
-        }
-
-        public ProgressiveData<uint> Ingenuity
-        {
-            get
-            {
-                return CopyProgData(this._ingenuity);
-            }
-            private set
-            {
-                this._ingenuity = value;
-            }
-        }
-
-        public ProgressiveData<uint> Charisma
-        {
-            get
-            {
-                return CopyProgData(this._charisma);
-            }
-            private set
-            {
-                this._charisma = value;
-            }
-        }
-
-        public ProgressiveData<uint> LevelExp
-        {
-            get
-            {
-                return CopyProgData(this._levelExp);
-            }
-            private set
-            {
-                this._levelExp = value;
-            }
-        }
-
         public ulong Money
         {
             get;
@@ -243,9 +171,34 @@ namespace ZootRPTesting
             return this._levelExp.Value;
         }
 
-        public ProgressiveData<uint> GetProgressDataHealth()
+        public IProgression<uint> GetHealthProgression()
         {
-            return this._health;
+            return this._health.Progression;
+        }
+
+        public IProgression<uint> GetEnduranceProgression()
+        {
+            return this._endurance.Progression;
+        }
+
+        public IProgression<uint> GetDexterityProgression()
+        {
+            return this._dexterity.Progression;
+        }
+
+        public IProgression<uint> GetIngenuityProgression()
+        {
+            return this._ingenuity.Progression;
+        }
+
+        public IProgression<uint> GetCharismaProgression()
+        {
+            return this._ingenuity.Progression;
+        }
+
+        public IProgression<uint> GetLevelExpProgression()
+        {
+            return this._levelExp.Progression;
         }
 
         public uint ExpToNextLevel()
@@ -256,7 +209,7 @@ namespace ZootRPTesting
             }
             else
             {
-                uint toNext = LevelExp.Progression.ValueAt(Level);
+                uint toNext = this._levelExp.Progression.ValueAt(Level);
                 return (toNext > GetLevelExp()) ? (toNext - GetLevelExp()) : 0;
             }
         }
@@ -282,10 +235,11 @@ namespace ZootRPTesting
         {
             while (ExpToNextLevel() == 0 && Level < LEVEL_MAX)
             {
+                // save state to pass through update event
                 IPlayer prev = this;
 
                 // rollover exp
-                uint oldExp = LevelExp.Value;
+                uint oldExp = this._levelExp.Value;
                 this._levelExp.Value = 0;
                 uint rollover = oldExp - ExpToNextLevel();
                 this._levelExp.Value = rollover;
@@ -306,11 +260,6 @@ namespace ZootRPTesting
             this._dexterity.ProgressToValue(Level);
             this._ingenuity.ProgressToValue(Level);
             this._charisma.ProgressToValue(Level);
-        }
-
-        private ProgressiveData<uint> CopyProgData(ProgressiveData<uint> obj)
-        {
-            return new ProgressiveData<uint>(obj.Value, obj.Progression);
         }
     }
 }

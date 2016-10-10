@@ -18,12 +18,6 @@ namespace ZootRP.Core
         IJob Job { get; }
         IResidence Residence { get; }
         
-        // Player stats wrapped in their advancement functions
-        ProgressiveData<uint> Health { get; }
-        ProgressiveData<uint> Endurance { get; }
-        ProgressiveData<uint> Dexterity { get; }
-        ProgressiveData<uint> Ingenuity { get; }
-        ProgressiveData<uint> Charisma { get; }
 
         // I think the interface doesn't need to guarantee the use of an IProgression?
         // If that's the case, why have it in Core, though...
@@ -34,7 +28,6 @@ namespace ZootRP.Core
         ulong Money { get; }
         
         uint Level { get; }
-        ProgressiveData<uint> LevelExp { get; }
 
         uint GetHealth();
         uint GetEndurance();
@@ -44,6 +37,13 @@ namespace ZootRP.Core
         uint GetLevelExp();
 
         uint ExpToNextLevel();
+
+        IProgression<uint> GetHealthProgression();
+        IProgression<uint> GetEnduranceProgression();
+        IProgression<uint> GetDexterityProgression();
+        IProgression<uint> GetIngenuityProgression();
+        IProgression<uint> GetCharismaProgression();
+        IProgression<uint> GetLevelExpProgression();
 
         void GiveReward(IReward reward);
         void AwardLevelExp(uint exp);

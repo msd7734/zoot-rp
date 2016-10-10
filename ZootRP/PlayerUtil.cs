@@ -23,15 +23,15 @@ namespace ZootRP.Core
             };
         }
 
-        public static Dictionary<PlayerStat, ProgressiveData<uint>> GetProgressData(IPlayer player)
+        public static Dictionary<PlayerStat, IProgression<uint>> GetProgressData(IPlayer player)
         {
-            return new Dictionary<PlayerStat, ProgressiveData<uint>>()
+            return new Dictionary<PlayerStat, IProgression<uint>>()
             {
-                { PlayerStat.Health, player.Health },
-                { PlayerStat.Endurance, player.Endurance },
-                { PlayerStat.Dexterity, player.Dexterity },
-                { PlayerStat.Ingenuity, player.Ingenuity },
-                { PlayerStat.Charisma, player.Charisma }
+                { PlayerStat.Health, player.GetHealthProgression() },
+                { PlayerStat.Endurance, player.GetEnduranceProgression() },
+                { PlayerStat.Dexterity, player.GetDexterityProgression() },
+                { PlayerStat.Ingenuity, player.GetIngenuityProgression() },
+                { PlayerStat.Charisma, player.GetCharismaProgression() }
             };
         }
 
@@ -42,7 +42,7 @@ namespace ZootRP.Core
 
         public static ProgressionType GetProgressionType(IPlayer player, PlayerStat stat)
         {
-            return GetProgressData(player)[stat].Progression.Rate;
+            return GetProgressData(player)[stat].Rate;
         }
 
         public static void PrintPlayerStats(IPlayer player, TextWriter outputWriter, bool printProgressType = false)
@@ -54,7 +54,7 @@ namespace ZootRP.Core
                 foreach (var kv in dict)
                 {
                     outputWriter.WriteLine("{0}: {1} ({2})",
-                        kv.Key.ToString(), kv.Value, progData[kv.Key].Progression.Rate);
+                        kv.Key.ToString(), kv.Value, progData[kv.Key].Rate);
                 }
             }
             else

@@ -27,13 +27,8 @@ namespace ZootRPTesting
         {
             Player p = new Player("John");
 
-            Console.WriteLine(p.Charisma.Progression.Rate);
-
             PlayerUtil.PrintPlayerStats(p, true);
             PrintExpCheck(p);
-
-            var healthData = p.GetProgressDataHealth();
-            healthData.Value = 21;
 
             Console.WriteLine("Player health: {0}", p.GetHealth());
 

@@ -48,6 +48,7 @@
     <Compile Include="LevelExpProgression.cs" />
     <Compile Include="PlayerIdentifier.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ProgressiveData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Reward.cs" />

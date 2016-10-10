@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZootRP.Core
+using ZootRP.Core;
+
+namespace ZootRPTesting
 {
     public class ProgressiveData<T>
     {
