@@ -16,5 +16,10 @@ namespace ZootRP.Core
             Value = value;
             Progression = progression;
         }
+
+        public void ProgressToValue(T value)
+        {
+            Value = Progression.ValueAt(value);
+        }
     }
 }

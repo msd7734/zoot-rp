@@ -132,11 +132,11 @@ namespace ZootRPTesting
         public static readonly uint LEVEL_MIN = 1;
         public static readonly uint LEVEL_MAX = 100;
 
-        private static ProgressionRate[] PROGRESSION_RATES =
+        private static ProgressionType[] PROGRESSION_RATES =
         {
-                ProgressionRate.Fast,
-                ProgressionRate.Slow,
-                ProgressionRate.Average
+                ProgressionType.Fast,
+                ProgressionType.Slow,
+                ProgressionType.Average
         };
 
         private ProgressiveData<uint> _health;
@@ -208,7 +208,7 @@ namespace ZootRPTesting
             return (uint) ((b1 ^ b2) % STAT_STARTING_MAX) + 1;
         }
 
-        private static ProgressionRate ProgressRateFromSeed(byte seed)
+        private static ProgressionType ProgressRateFromSeed(byte seed)
         {
             return PROGRESSION_RATES[seed % PROGRESSION_RATES.Length];
         }
@@ -260,7 +260,6 @@ namespace ZootRPTesting
         {
             AwardLevelExp(reward.LevelExp);
             AwardMoney(reward.Money);
-            HandleLevelUp();
         }
 
         public void AwardLevelExp(uint exp)
@@ -276,7 +275,7 @@ namespace ZootRPTesting
 
         private void HandleLevelUp()
         {
-            if (ExpToNextLevel() == 0 && Level < LEVEL_MAX)
+            while (ExpToNextLevel() == 0 && Level < LEVEL_MAX)
             {
                 // rollover exp
                 uint oldExp = LevelExp.Value;
@@ -286,13 +285,17 @@ namespace ZootRPTesting
 
                 Level += 1;
 
-                LevelUpStats(Level - 1);
+                LevelUpStats();
             }
         }
 
-        private void LevelUpStats(uint previousLevel)
+        private void LevelUpStats()
         {
-            
+            this._health.ProgressToValue(Level);
+            this._endurance.ProgressToValue(Level);
+            this._dexterity.ProgressToValue(Level);
+            this._ingenuity.ProgressToValue(Level);
+            this._charisma.ProgressToValue(Level);
         }
 
         private ProgressiveData<uint> CopyProgData(ProgressiveData<uint> obj)

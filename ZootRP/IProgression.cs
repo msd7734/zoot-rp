@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ZootRP.Core
 {
     // maybe allow these to be extended somehow
-    public enum ProgressionRate
+    public enum ProgressionType
     {
         Default,
         Slow,
@@ -17,7 +17,7 @@ namespace ZootRP.Core
 
     public interface IProgression<T>
     {
-        ProgressionRate Rate { get; }
+        ProgressionType Rate { get; }
         T Min { get; }
         T Max { get; }
         T ValueAt(T x);

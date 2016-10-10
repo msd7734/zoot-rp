@@ -12,17 +12,24 @@ namespace ZootRPTesting
 {
     class Program
     {
+        static void PrintExpCheck(IPlayer player)
+        {
+            Console.WriteLine("{0}, level {1}: {2} Exp, needs {3} to next level",
+                player.Identifier.CanonicalName, player.Level, player.GetLevelExp(), player.ExpToNextLevel());
+        }
+
         static void Main(string[] args)
         {
             Player p = new Player("John");
-            var dict = PlayerUtil.GetStatsDict(p);
-            foreach (var kv in dict) {
-                Console.WriteLine("{0}: {1}", kv.Key.ToString(), kv.Value);
-            }
 
-            var h = p.Health;
-            h.Value = 20;
-            Console.WriteLine("New health?: {0}", p.GetHealth());
+            Console.WriteLine(p.Charisma.Progression.Rate);
+
+            PlayerUtil.PrintPlayerStats(p, true);
+            PrintExpCheck(p);
+
+            p.AwardLevelExp(600000);
+            PlayerUtil.PrintPlayerStats(p, false);
+            PrintExpCheck(p);
 
             /*
             Console.WriteLine("Fast stat progressions: {0}", String.Join(",", p.FastStats));

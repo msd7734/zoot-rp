@@ -12,7 +12,7 @@ namespace ZootRPTesting
 {
     public class StatProgression : IProgression<uint>
     {
-        public ProgressionRate Rate
+        public ProgressionType Rate
         {
             get;
             private set;
@@ -36,22 +36,23 @@ namespace ZootRPTesting
 
         private Func<double, double> _linearFunc;
 
-        public StatProgression(uint startStat, uint maxStat, ProgressionRate rate)
+        public StatProgression(uint startStat, uint maxStat, ProgressionType rate)
         {
             Min = startStat;
             Max = maxStat;
+            Rate = rate;
 
             double targetLevel;
 
             switch (rate)
             {
-                case ProgressionRate.Fast:
+                case ProgressionType.Fast:
                     targetLevel = MAXOUT_FAST;
                     break;
-                case ProgressionRate.Average:
+                case ProgressionType.Average:
                     targetLevel = MAXOUT_AVERAGE;
                     break;
-                case ProgressionRate.Slow:
+                case ProgressionType.Slow:
                     targetLevel = MAXOUT_SLOW;
                     break;
                 default:

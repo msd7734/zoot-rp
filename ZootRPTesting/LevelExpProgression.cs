@@ -10,7 +10,7 @@ namespace ZootRPTesting
 {
     public class LevelExpProgression : IProgression<uint>
     {
-        public ProgressionRate Rate
+        public ProgressionType Rate
         {
             get;
             private set;
