@@ -18,6 +18,11 @@ namespace ZootRPTesting
                 player.Identifier.CanonicalName, player.Level, player.GetLevelExp(), player.ExpToNextLevel());
         }
 
+        static void ReportLevelUp(IPlayer sender, EventArgs e)
+        {
+            Console.WriteLine("{0} leveled up!", sender.Identifier.CanonicalName);
+        }
+
         static void Main(string[] args)
         {
             Player p = new Player("John");
@@ -27,7 +32,16 @@ namespace ZootRPTesting
             PlayerUtil.PrintPlayerStats(p, true);
             PrintExpCheck(p);
 
-            p.AwardLevelExp(600000);
+            var healthData = p.GetProgressDataHealth();
+            healthData.Value = 21;
+
+            Console.WriteLine("Player health: {0}", p.GetHealth());
+
+            p.LevelUpEvent += ReportLevelUp;
+
+
+
+            p.AwardLevelExp(300);
             PlayerUtil.PrintPlayerStats(p, false);
             PrintExpCheck(p);
 

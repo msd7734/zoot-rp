@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZootRP.Core
 {
-    public delegate void PlayerStateChange(IPlayer sender, EventArgs e);
+    public delegate void PlayerStateChange(IPlayer sender, PlayerUpdateEventArgs e);
 
     public interface IPlayer
     {

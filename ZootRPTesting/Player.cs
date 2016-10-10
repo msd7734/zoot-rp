@@ -243,6 +243,11 @@ namespace ZootRPTesting
             return this._levelExp.Value;
         }
 
+        public ProgressiveData<uint> GetProgressDataHealth()
+        {
+            return this._health;
+        }
+
         public uint ExpToNextLevel()
         {
             if (Level >= LEVEL_MAX)
@@ -277,6 +282,8 @@ namespace ZootRPTesting
         {
             while (ExpToNextLevel() == 0 && Level < LEVEL_MAX)
             {
+                IPlayer prev = this;
+
                 // rollover exp
                 uint oldExp = LevelExp.Value;
                 this._levelExp.Value = 0;
@@ -286,6 +293,9 @@ namespace ZootRPTesting
                 Level += 1;
 
                 LevelUpStats();
+
+                var args = new PlayerUpdateEventArgs(prev);
+                LevelUpEvent.Invoke(this, args);
             }
         }
 
