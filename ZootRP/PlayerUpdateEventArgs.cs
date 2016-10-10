@@ -10,14 +10,28 @@ namespace ZootRP.Core
     {
         private readonly PlayerMutableState _state;
 
+        public string Message { get; private set; }
+
         public PlayerUpdateEventArgs(PlayerMutableState state)
         {
             this._state = state;
+            Message = String.Empty;
+        }
+
+        public PlayerUpdateEventArgs(PlayerMutableState state, string message)
+        {
+            this._state = state;
+            Message = message;
         }
 
         public IPlayer GetPlayerFromMutableState()
         {
             return this._state;
+        }
+
+        public bool HasMessage()
+        {
+            return String.IsNullOrEmpty(Message);
         }
     }
 }

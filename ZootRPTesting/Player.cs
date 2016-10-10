@@ -12,6 +12,7 @@ namespace ZootRPTesting
     {
 
         public event PlayerStateChange LevelUpEvent;
+        public event PlayerStateChange RewardEvent;
 
         #region Accessors
 
@@ -216,8 +217,19 @@ namespace ZootRPTesting
 
         public void GiveReward(IReward reward)
         {
-            AwardLevelExp(reward.LevelExp);
-            AwardMoney(reward.Money);
+            PlayerMutableState prevState = new PlayerMutableState(this);
+            if ((reward.Type & RewardType.LevelExp) == RewardType.LevelExp)
+            {
+                AwardLevelExp((uint)reward.GetRewardValue(RewardType.LevelExp));
+            }
+
+            if ((reward.Type & RewardType.Money) == RewardType.Money)
+            {
+                AwardMoney((ulong) reward.GetRewardValue(RewardType.Money));
+            }
+
+            PlayerUpdateEventArgs args = new PlayerUpdateEventArgs(prevState, reward.Description);
+            RewardEvent.Invoke(this, args);
         }
 
         public void AwardLevelExp(uint exp)

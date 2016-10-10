@@ -11,6 +11,7 @@ namespace ZootRP.Core
     public interface IPlayer
     {
         event PlayerStateChange LevelUpEvent;
+        event PlayerStateChange RewardEvent;
 
         // Main data objects that 
         IPlayerIdentifier Identifier { get; }

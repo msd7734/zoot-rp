@@ -31,23 +31,26 @@ namespace ZootRPTesting
                 uint diff = curStat - prevStat;
                 Console.WriteLine("{0}: {1} (+{2})", stat, curStat, diff);
             }
+        }
 
-            try
-            {
-                ICharacter c = e.GetPlayerFromMutableState().Character;
-            }
-            catch (ImmutableStateAccessException isae)
-            {
-                Console.WriteLine(isae.Message);
-            }
+        static void ReportReward(IPlayer sender, PlayerUpdateEventArgs e)
+        {
+            Console.WriteLine("{0} received:{2}{1}", sender.Identifier.CanonicalName, e.Message, Environment.NewLine);
+            Console.WriteLine("{2} has: {0} Bucks and {1} level EXP", sender.Money, sender.GetLevelExp(), sender.Identifier.CanonicalName);
         }
 
         static void Main(string[] args)
         {
             Player p = new Player("John");
             p.LevelUpEvent += ReportLevelUp;
+            p.RewardEvent += ReportReward;
 
-            p.AwardLevelExp(300);
+            p.GiveReward(RewardUtil.CreateMoneyReward(120));
+            Console.WriteLine();
+            p.GiveReward(RewardUtil.CreateLevelExpReward(35));
+            Console.WriteLine();
+            IReward composite = RewardUtil.ComposeRewards(RewardUtil.CreateMoneyReward(30), RewardUtil.CreateLevelExpReward(200));
+            p.GiveReward(composite);
 
             /*
             Console.WriteLine("Fast stat progressions: {0}", String.Join(",", p.FastStats));

@@ -9,6 +9,7 @@ namespace ZootRP.Core
     [Flags]
     public enum RewardType
     {
+        None,
         Money,
         LevelExp
     }
@@ -16,10 +17,9 @@ namespace ZootRP.Core
     public interface IReward
     {
         RewardType Type { get; }
-        ulong Money { get; }
-         
-        uint LevelExp { get; }
         string Description { get; }
+
+        object GetRewardValue(RewardType type);
     }
 
     

@@ -53,7 +53,9 @@
     <Compile Include="Player.cs" />
     <Compile Include="Reward.cs" />
     <Compile Include="RewardParts.cs" />
+    <Compile Include="RewardUtil.cs" />
     <Compile Include="StatProgression.cs" />
+    <Compile Include="StringLib.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -43,3 +43,10 @@ Activities
   - Level up
   - - stat up
   - - report via event
+
+  Second task:
+   - Implement activities
+   - - Who/What/Where decides which activites a player can do per day, and how many?
+   - - How to determine success?
+   - - Maybe make an Activity a virtual class, and each subtype a concrete class?
+   - - - Subtypes would be things like conditions for success, difficulty, etc.

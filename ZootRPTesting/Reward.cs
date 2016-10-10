@@ -16,68 +16,75 @@ namespace ZootRPTesting
             private set;
         }
 
-        public ulong Money
-        {
-            get;
-            private set;
-        }
-
-        public uint LevelExp
-        {
-            get;
-            private set;
-        }
-
         public string Description
         {
             get;
             private set;
         }
 
-        public Reward(RewardType typeFlags, RewardParts rewards)
+        private RewardParts _parts;
+
+        public Reward(RewardParts rewards)
         {
-            Description = String.Empty;
+            RewardType typeFlags = RewardType.None;
+            foreach (var kv in rewards.GetAll())
+            {
+                typeFlags = typeFlags | kv.Key;
+            }
+
+            if (typeFlags == RewardType.None)
+            {
+                Description = String.Empty;
+            }
+            else
+            {
+                SetDescription(rewards);
+            }
+
             Type = typeFlags;
 
-            Money = 0;
-            LevelExp = 0;
-
-            HandleRewardTypes(rewards);
+            this._parts = rewards;
         }
 
-        public Reward(RewardType typeFlags, String description, RewardParts rewards)
+        public Reward(RewardParts rewards, string description)
         {
+            RewardType typeFlags = RewardType.None;
+            foreach (var kv in rewards.GetAll())
+            {
+                typeFlags = typeFlags | kv.Key;
+            }
+
             Description = description;
             Type = typeFlags;
 
-            Money = 0;
-            LevelExp = 0;
-
-            HandleRewardTypes(rewards);
+            this._parts = rewards;
         }
 
-        private void HandleRewardTypes(RewardParts parts)
+        public object GetRewardValue(RewardType type)
         {
-            var list = parts.GetAll();
-            foreach (var kvp in list)
-            {
-                SetFromType(kvp.Key, kvp.Value);
-            }
+            return this._parts.Get(type);
         }
 
-        private void SetFromType(RewardType type, object reward)
+        private void SetDescription(RewardParts rewards)
         {
-            switch (type)
+            StringBuilder builder = new StringBuilder();
+            bool first = true;
+            string toAdd = String.Empty;
+            foreach (var kv in rewards.GetAll())
             {
-                case RewardType.Money:
-                    Money = (ulong)reward;
-                    break;
-                case RewardType.LevelExp:
-                    LevelExp = (uint)reward;
-                    break;
-                default:
-                    return;
+                toAdd = String.Format("{0} {1}", kv.Value, StringLib.RewardTypeStrings[kv.Key]);
+                if (!first)
+                {
+                    toAdd = ", " + toAdd;
+                }
+                else
+                {
+                    first = false;
+                }
+                builder.Append(toAdd);
             }
+
+            Description = builder.ToString();
         }
     }
 }

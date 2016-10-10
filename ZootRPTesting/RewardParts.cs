@@ -12,11 +12,19 @@ namespace ZootRPTesting
     {
         private Dictionary<RewardType, object> _dict;
 
-        public RewardParts() { }
+        public RewardParts() 
+        {
+            this._dict = new Dictionary<RewardType, object>();
+        }
 
         public void Add(RewardType type, object reward)
         {
             this._dict.Add(type, reward);
+        }
+
+        public object Get(RewardType type)
+        {
+            return this._dict[type];
         }
 
         public List<KeyValuePair<RewardType, object>> GetAll()

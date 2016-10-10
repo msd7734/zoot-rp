@@ -38,6 +38,7 @@ namespace ZootRP.Core
         }
 
         public event PlayerStateChange LevelUpEvent;
+        public event PlayerStateChange RewardEvent;
 
         public IPlayerIdentifier Identifier
         {
