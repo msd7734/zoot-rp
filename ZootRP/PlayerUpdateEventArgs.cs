@@ -8,16 +8,16 @@ namespace ZootRP.Core
 {
     public class PlayerUpdateEventArgs : EventArgs
     {
-        private readonly IPlayer _previousPlayerState;
+        private readonly PlayerMutableState _state;
 
-        public PlayerUpdateEventArgs(IPlayer previousPlayerState)
+        public PlayerUpdateEventArgs(PlayerMutableState state)
         {
-            this._previousPlayerState = previousPlayerState;
+            this._state = state;
         }
 
-        public IPlayer GetPrevPlayerState()
+        public IPlayer GetPlayerFromMutableState()
         {
-            return this._previousPlayerState;
+            return this._state;
         }
     }
 }

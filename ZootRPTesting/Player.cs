@@ -60,7 +60,7 @@ namespace ZootRPTesting
         public static readonly uint LEVEL_MIN = 1;
         public static readonly uint LEVEL_MAX = 100;
 
-        private static ProgressionType[] PROGRESSION_RATES =
+        private static readonly ProgressionType[] PROGRESSION_RATES =
         {
                 ProgressionType.Fast,
                 ProgressionType.Slow,
@@ -236,7 +236,7 @@ namespace ZootRPTesting
             while (ExpToNextLevel() == 0 && Level < LEVEL_MAX)
             {
                 // save state to pass through update event
-                IPlayer prev = this;
+                PlayerMutableState pms = new PlayerMutableState(this);
 
                 // rollover exp
                 uint oldExp = this._levelExp.Value;
@@ -248,7 +248,7 @@ namespace ZootRPTesting
 
                 LevelUpStats();
 
-                var args = new PlayerUpdateEventArgs(prev);
+                var args = new PlayerUpdateEventArgs(pms);
                 LevelUpEvent.Invoke(this, args);
             }
         }

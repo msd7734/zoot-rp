@@ -18,27 +18,36 @@ namespace ZootRPTesting
                 player.Identifier.CanonicalName, player.Level, player.GetLevelExp(), player.ExpToNextLevel());
         }
 
-        static void ReportLevelUp(IPlayer sender, EventArgs e)
+        static void ReportLevelUp(IPlayer sender, PlayerUpdateEventArgs e)
         {
             Console.WriteLine("{0} leveled up!", sender.Identifier.CanonicalName);
+            var prevStats = PlayerUtil.GetStatValues(e.GetPlayerFromMutableState());
+            var curStats = PlayerUtil.GetStatValues(sender);
+
+            foreach (PlayerStat stat in curStats.Keys)
+            {
+                uint curStat = curStats[stat];
+                uint prevStat = prevStats[stat];
+                uint diff = curStat - prevStat;
+                Console.WriteLine("{0}: {1} (+{2})", stat, curStat, diff);
+            }
+
+            try
+            {
+                ICharacter c = e.GetPlayerFromMutableState().Character;
+            }
+            catch (ImmutableStateAccessException isae)
+            {
+                Console.WriteLine(isae.Message);
+            }
         }
 
         static void Main(string[] args)
         {
             Player p = new Player("John");
-
-            PlayerUtil.PrintPlayerStats(p, true);
-            PrintExpCheck(p);
-
-            Console.WriteLine("Player health: {0}", p.GetHealth());
-
             p.LevelUpEvent += ReportLevelUp;
 
-
-
             p.AwardLevelExp(300);
-            PlayerUtil.PrintPlayerStats(p, false);
-            PrintExpCheck(p);
 
             /*
             Console.WriteLine("Fast stat progressions: {0}", String.Join(",", p.FastStats));
