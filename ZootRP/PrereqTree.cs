@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace ZootRP.Core
 {
-    public interface IJob
+    public class PrereqTree
     {
-        string Name { get; }
-        string Description { get; }
 
-        IReward Work(IPlayer player);
     }
 }

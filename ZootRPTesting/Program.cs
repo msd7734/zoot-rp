@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 using MathNet.Numerics;
 
 using ZootRP.Core;
+using ZootRP.Strings;
 
 namespace ZootRPTesting
 {
@@ -45,7 +47,25 @@ namespace ZootRPTesting
             p.LevelUpEvent += ReportLevelUp;
             p.RewardEvent += ReportReward;
 
-            Console.WriteLine("{0} is a {1}.", p.Character.Name, p.Character.Species.Name.ToLower());
+            var defs = new TokenDefinition[]
+            {
+                new TokenDefinition(@"(?i)(health|endurance|dexterity|ingenuity|charisma)","PLAYER-VALUE"),
+                new TokenDefinition(@"(<|>|<=|>=|=)", "COMPARATOR"),
+                new TokenDefinition(@"[0-9]+$", "INTEGER")
+            };
+
+            // throws exception when encountering anything not in lexicon
+            // need to extend lexer to allow definitions based on tokens
+            // need to allow for tree definitions for things like
+            // health > 10 && charisma >= 25 && level >= 15
+            string sample = "health > 10";
+
+            TextReader reader = new StringReader(sample);
+            Lexer l = new Lexer(reader, defs);
+            while (l.Next())
+            {
+                Console.WriteLine("Token: {0}  Contents: {1}", l.Token, l.TokenContents);
+            }
 
             /*
             Console.WriteLine("Fast stat progressions: {0}", String.Join(",", p.FastStats));

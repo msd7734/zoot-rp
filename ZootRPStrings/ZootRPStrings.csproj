@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A9887702-3268-4C6C-BC85-72975E41718A}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{B5901404-BD7C-4410-B78B-9BA3EE5ADBFB}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZootRPTesting</RootNamespace>
-    <AssemblyName>ZootRPTesting</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <RootNamespace>ZootRP.Strings</RootNamespace>
+    <AssemblyName>ZootRPStrings</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MathNet.Numerics">
-      <HintPath>..\packages\MathNet.Numerics.3.13.1\lib\net40\MathNet.Numerics.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,34 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Character.cs" />
-    <Compile Include="Job.cs" />
-    <Compile Include="LevelExpProgression.cs" />
-    <Compile Include="PlayerIdentifier.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="ProgressiveData.cs" />
+    <Compile Include="Lexer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="Reward.cs" />
-    <Compile Include="RewardParts.cs" />
-    <Compile Include="RewardUtil.cs" />
-    <Compile Include="Species.cs" />
-    <Compile Include="StatProgression.cs" />
-    <Compile Include="StringLib.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ZootRPStrings\ZootRPStrings.csproj">
-      <Project>{b5901404-bd7c-4410-b78b-9ba3ee5adbfb}</Project>
-      <Name>ZootRPStrings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZootRP\ZootRP.csproj">
-      <Project>{7d1d21c7-a6a9-413e-ae2a-835dfa6eeabe}</Project>
-      <Name>ZootRP</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
