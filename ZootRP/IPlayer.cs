@@ -18,13 +18,6 @@ namespace ZootRP.Core
         ICharacter Character { get; }
         IJob Job { get; }
         IResidence Residence { get; }
-        
-
-        // I think the interface doesn't need to guarantee the use of an IProgression?
-        // If that's the case, why have it in Core, though...
-
-        // IGrowable<T> interface that gives IProgression GetProgression()
-        // This can then be applied to a wrapper class of a stat
 
         ulong Money { get; }
         

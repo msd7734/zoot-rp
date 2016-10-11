@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Character.cs" />
     <Compile Include="LevelExpProgression.cs" />
     <Compile Include="PlayerIdentifier.cs" />
     <Compile Include="Program.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Reward.cs" />
     <Compile Include="RewardParts.cs" />
     <Compile Include="RewardUtil.cs" />
+    <Compile Include="Species.cs" />
     <Compile Include="StatProgression.cs" />
     <Compile Include="StringLib.cs" />
   </ItemGroup>

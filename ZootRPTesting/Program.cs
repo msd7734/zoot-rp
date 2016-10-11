@@ -45,12 +45,7 @@ namespace ZootRPTesting
             p.LevelUpEvent += ReportLevelUp;
             p.RewardEvent += ReportReward;
 
-            p.GiveReward(RewardUtil.CreateMoneyReward(120));
-            Console.WriteLine();
-            p.GiveReward(RewardUtil.CreateLevelExpReward(35));
-            Console.WriteLine();
-            IReward composite = RewardUtil.ComposeRewards(RewardUtil.CreateMoneyReward(30), RewardUtil.CreateLevelExpReward(200));
-            p.GiveReward(composite);
+            Console.WriteLine("{0} is a {1}.", p.Character.Name, p.Character.Species.Name.ToLower());
 
             /*
             Console.WriteLine("Fast stat progressions: {0}", String.Join(",", p.FastStats));

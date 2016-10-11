@@ -64,7 +64,6 @@ namespace ZootRP.Core
                     outputWriter.WriteLine("{0}: {1}", kv.Key.ToString(), kv.Value);
                 }
             }
-            
         }
 
         public static void PrintPlayerStats(IPlayer player, bool printProgressType = false)

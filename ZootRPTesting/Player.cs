@@ -80,12 +80,12 @@ namespace ZootRPTesting
             Identifier = new PlayerIdentifier(Guid.NewGuid(), name);
             Level = 1;
             this._levelExp = new ProgressiveData<uint>(0, new LevelExpProgression());
-            Money = 20;
+            Money = 0;
 
-            GenerateStats();
+            GenerateRandomFeatures();
         }
 
-        private void GenerateStats()
+        private void GenerateRandomFeatures()
         {
             // Get a 16-byte array from guid
             byte[] seed = Identifier.Id.ToByteArray();
@@ -130,6 +130,8 @@ namespace ZootRPTesting
             );
 
             // use remaining bytes to determine something else?
+
+            this.Character = new Character(Identifier.CanonicalName, new Species(seed[10]));
         }
 
         private uint StatFromSeeds(byte b1, byte b2)
@@ -217,7 +219,11 @@ namespace ZootRPTesting
 
         public void GiveReward(IReward reward)
         {
+            // Just reporting the reward does not care about the previous state
             PlayerMutableState prevState = new PlayerMutableState(this);
+            PlayerUpdateEventArgs args = new PlayerUpdateEventArgs(prevState, reward.Description);
+            RewardEvent.Invoke(this, args);
+
             if ((reward.Type & RewardType.LevelExp) == RewardType.LevelExp)
             {
                 AwardLevelExp((uint)reward.GetRewardValue(RewardType.LevelExp));
@@ -228,8 +234,9 @@ namespace ZootRPTesting
                 AwardMoney((ulong) reward.GetRewardValue(RewardType.Money));
             }
 
-            PlayerUpdateEventArgs args = new PlayerUpdateEventArgs(prevState, reward.Description);
-            RewardEvent.Invoke(this, args);
+            // Late report, this is the "most valid" data, but will cause exp to be reported after a level-up
+            // PlayerUpdateEventArgs args = new PlayerUpdateEventArgs(prevState, reward.Description);
+            // RewardEvent.Invoke(this, args);
         }
 
         public void AwardLevelExp(uint exp)
