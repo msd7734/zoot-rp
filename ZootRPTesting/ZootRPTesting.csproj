@@ -65,10 +65,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ZootRPStrings\ZootRPStrings.csproj">
-      <Project>{b5901404-bd7c-4410-b78b-9ba3ee5adbfb}</Project>
-      <Name>ZootRPStrings</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ZootRP\ZootRP.csproj">
       <Project>{7d1d21c7-a6a9-413e-ae2a-835dfa6eeabe}</Project>
       <Name>ZootRP</Name>

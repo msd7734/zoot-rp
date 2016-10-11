@@ -49,23 +49,44 @@ namespace ZootRPTesting
 
             var defs = new TokenDefinition[]
             {
-                new TokenDefinition(@"(?i)(health|endurance|dexterity|ingenuity|charisma)","PLAYER-VALUE"),
+                new TokenDefinition(@"(?i)(health|endurance|dexterity|ingenuity|charisma)(?-i)","PLAYER-VALUE"),
                 new TokenDefinition(@"(<|>|<=|>=|=)", "COMPARATOR"),
-                new TokenDefinition(@"[0-9]+$", "INTEGER")
+                new TokenDefinition(@"[0-9]+$", "INTEGER"),
+                new TokenDefinition(@"\s*", "SPACE")
             };
 
             // throws exception when encountering anything not in lexicon
             // need to extend lexer to allow definitions based on tokens
             // need to allow for tree definitions for things like
             // health > 10 && charisma >= 25 && level >= 15
-            string sample = "health > 10";
+            string sample = "HEALTH  > 10";
 
-            TextReader reader = new StringReader(sample);
-            Lexer l = new Lexer(reader, defs);
-            while (l.Next())
-            {
-                Console.WriteLine("Token: {0}  Contents: {1}", l.Token, l.TokenContents);
-            }
+            Lexicon nodeLexicon = new Lexicon(
+                    new TokenDefinition[]
+                    {
+                        new TokenDefinition(@"(?i)(health|endurance|dexterity|ingenuity|charisma)(?-i)","PLAYER-VALUE"),
+                        new TokenDefinition(@"(<|>|<=|>=|=)", "COMPARATOR"),
+                        new TokenDefinition(@"[0-9]+", "INTEGER"),
+                        new TokenDefinition(@"\s*", "SPACE"),
+                        new TokenDefinition(@"(&&|\|\|)", "LOGIC-BRANCH")
+                    },
+                    new Dictionary<string, string>
+                    { 
+                        { "COMPARISON", "[[PLAYER-VALUE]][[SPACE]][[COMPARATOR]][[SPACE]][[INTEGER]]" },
+                        { "BRANCH-EXPR", "[[COMPARISON]][[SPACE]][[LOGIC-BRANCH]][[SPACE]][[COMPARISON]]" },
+                        { "MULTI-BRANCH", "[[BRANCH-EXPR]][[SPACE]]([[LOGIC-BRANCH]][[SPACE]][[COMPARISON]])+"}
+                    },
+                    false
+            );
+
+            Console.WriteLine(nodeLexicon.InLexicon("health > 10 && charisma > 20 && endurance = 18"));
+
+            /*
+            PrereqTree ptree = new PrereqTree("dexterity< 12");
+            PrereqTree ptree2 = new PrereqTree("health >= 10 && charisma >= 20");
+            Console.WriteLine(ptree.IsValid);
+            Console.WriteLine(ptree2.IsValid);
+            */
 
             /*
             Console.WriteLine("Fast stat progressions: {0}", String.Join(",", p.FastStats));

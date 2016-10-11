@@ -57,12 +57,15 @@
     <Compile Include="IResidence.cs" />
     <Compile Include="IReward.cs" />
     <Compile Include="ISpecies.cs" />
+    <Compile Include="Lexer.cs" />
+    <Compile Include="Lexicon.cs" />
     <Compile Include="PlayerMutableState.cs" />
     <Compile Include="PlayerUpdateEventArgs.cs" />
     <Compile Include="PlayerUtil.cs" />
     <Compile Include="PrereqNode.cs" />
     <Compile Include="PrereqTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TokenDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Notes.txt" />
