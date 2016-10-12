@@ -64,7 +64,7 @@ namespace ZootRPTesting
             Lexicon nodeLexicon = new Lexicon(
                     new TokenDefinition[]
                     {
-                        new TokenDefinition(@"(?i)(health|endurance|dexterity|ingenuity|charisma)(?-i)","PLAYER-VALUE"),
+                        new TokenDefinition(@"(?i)(health|endurance|dexterity|ingenuity|charisma|level)(?-i)","PLAYER-VALUE"),
                         new TokenDefinition(@"(<|>|<=|>=|=)", "COMPARATOR"),
                         new TokenDefinition(@"[0-9]+", "INTEGER"),
                         new TokenDefinition(@"\s*", "SPACE"),
@@ -79,7 +79,7 @@ namespace ZootRPTesting
                     false
             );
 
-            Console.WriteLine(nodeLexicon.InLexicon("health > 10 && charisma > 20 && endurance = 18"));
+            Console.WriteLine(nodeLexicon.InLexicon("level = 15 || charisma >= 25"));
 
             /*
             PrereqTree ptree = new PrereqTree("dexterity< 12");

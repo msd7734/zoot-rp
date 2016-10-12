@@ -57,13 +57,18 @@ namespace ZootRP.Strings
                 tokenIdent = m.Value.Substring(2, m.Value.Length - 4);
                 if (this.tokens.Keys.Contains(tokenIdent))
                 {
-                    //.Substring(1) to remove leading ^
-                    parsedExp = parsedExp.Replace(m.Value, "("+tokens[tokenIdent].ToString().Substring(1)+")");
+                    //.Substring to remove leading ^ from token
+                    string snip = tokens[tokenIdent].ToString();
+                    snip = snip.Substring(1);
+                    //wrap individual tokens in parens
+                    parsedExp = parsedExp.Replace(m.Value, "("+snip+")");
                 }
                 else if (this.expressions.Keys.Contains(tokenIdent))
                 {
-                    //.Substring(1) to remove leading ^
-                    parsedExp = parsedExp.Replace(m.Value, expressions[tokenIdent].ToString().Substring(1));
+                    //.Substring to remove leading ^ and trailing $ from expression
+                    string snip = expressions[tokenIdent].ToString();
+                    snip = snip.Substring(1, snip.Length - 2);
+                    parsedExp = parsedExp.Replace(m.Value, snip);
                 }
                 else
                 {
@@ -74,21 +79,19 @@ namespace ZootRP.Strings
                 //TODO: handle error for unknown token
                 //if handled by the caller, this should at least rethrow as a properly labeled exception
             }
-            //The correct endgame:
-            //^((?i)(health|endurance|dexterity|ingenuity|charisma)(?-i))(\s*)((<|>|<=|>=|=))(\s*)([0-9]+)(\s*)((&&|\|\|))(\s*)((?i)(health|endurance|dexterity|ingenuity|charisma)(?-i))(\s*)((<|>|<=|>=|=))(\s*)([0-9]+)(\s*)(((&&|\|\|))(\s*)((?i)(health|endurance|dexterity|ingenuity|charisma)(?-i))(\s*)((<|>|<=|>=|=))(\s*)([0-9]+))+$
-            //What we're getting:
-            //^((?i)(health|endurance|dexterity|ingenuity|charisma)(?-i))(\\s*)((<|>|<=|>=|=))(\\s*)([0-9]+)$(\\s*)((&&|\\|\\|))(\\s*)((?i)(health|endurance|dexterity|ingenuity|charisma)(?-i))(\\s*)((<|>|<=|>=|=))(\\s*)([0-9]+)$$(\\s*)(((&&|\\|\\|))(\\s*)((?i)(health|endurance|dexterity|ingenuity|charisma)(?-i))(\\s*)((<|>|<=|>=|=))(\\s*)([0-9]+)$)+
-            expressions.Add(identifier, new RegexMatcher(parsedExp+"$"));
+
+            // make final expansion match a whole line only (^ is prepended by RegexMatcher)
+            parsedExp = parsedExp + "$";
+            expressions.Add(identifier, new RegexMatcher(parsedExp));
         }
 
         public bool InLexicon(string exp)
         {
+            string trim = exp.Trim();
             foreach (var kv in expressions)
             {
-                if (kv.Value.Match(exp) > 0)
+                if (kv.Value.Match(trim) > 0)
                 {
-                    Console.WriteLine("Matched with expr {0}", kv.Key);
-                    Console.WriteLine("Matched with regex {0}", kv.Value.ToString());
                     return true;
                 }
             }
