@@ -55,20 +55,23 @@ namespace ZootRP.Strings
             foreach (Match m in foundTokens)
             {
                 tokenIdent = m.Value.Substring(2, m.Value.Length - 4);
-                if (this.tokens.Keys.Contains(tokenIdent))
-                {
-                    //.Substring to remove leading ^ from token
-                    string snip = tokens[tokenIdent].ToString();
-                    snip = snip.Substring(1);
-                    //wrap individual tokens in parens
-                    parsedExp = parsedExp.Replace(m.Value, "("+snip+")");
-                }
-                else if (this.expressions.Keys.Contains(tokenIdent))
+                
+                // Sometimes tokens === expresssions, so check expressions first
+                // to avoid treating a token-expression as simply a token
+                if (this.expressions.Keys.Contains(tokenIdent))
                 {
                     //.Substring to remove leading ^ and trailing $ from expression
                     string snip = expressions[tokenIdent].ToString();
                     snip = snip.Substring(1, snip.Length - 2);
                     parsedExp = parsedExp.Replace(m.Value, snip);
+                }
+                else if (this.tokens.Keys.Contains(tokenIdent))
+                {
+                    //.Substring to remove leading ^ from token
+                    string snip = tokens[tokenIdent].ToString();
+                    snip = snip.Substring(1);
+                    //wrap individual tokens in parens
+                    parsedExp = parsedExp.Replace(m.Value, "(" + snip + ")");
                 }
                 else
                 {
@@ -87,15 +90,20 @@ namespace ZootRP.Strings
 
         public bool InLexicon(string exp)
         {
+            return !(String.IsNullOrEmpty(MatchExpression(exp)));
+        }
+
+        public string MatchExpression(string exp)
+        {
             string trim = exp.Trim();
             foreach (var kv in expressions)
             {
                 if (kv.Value.Match(trim) > 0)
                 {
-                    return true;
+                    return kv.Key;
                 }
             }
-            return false;
+            return String.Empty;
         }
     }
 }

@@ -79,7 +79,7 @@ namespace ZootRPTesting
                     false
             );
 
-            Console.WriteLine(nodeLexicon.InLexicon("level = 15 || charisma >= 25"));
+            PrereqTree ptree = new PrereqTree("level >= 10 && dexterity>=25 && health>=35");
 
             /*
             PrereqTree ptree = new PrereqTree("dexterity< 12");
