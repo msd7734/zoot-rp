@@ -60,9 +60,9 @@ namespace ZootRP.Strings
                 // to avoid treating a token-expression as simply a token
                 if (this.expressions.Keys.Contains(tokenIdent))
                 {
-                    //.Substring to remove leading ^ and trailing $ from expression
+                    //.Substring to remove leading ^ and trailing $? from expression
                     string snip = expressions[tokenIdent].ToString();
-                    snip = snip.Substring(1, snip.Length - 2);
+                    snip = snip.Substring(1, snip.Length - 3);
                     parsedExp = parsedExp.Replace(m.Value, snip);
                 }
                 else if (this.tokens.Keys.Contains(tokenIdent))
@@ -71,7 +71,8 @@ namespace ZootRP.Strings
                     string snip = tokens[tokenIdent].ToString();
                     snip = snip.Substring(1);
                     //wrap individual tokens in parens
-                    parsedExp = parsedExp.Replace(m.Value, "(" + snip + ")");
+                    //parsedExp = parsedExp.Replace(m.Value, "(" + snip + ")");
+                    parsedExp = parsedExp.Replace(m.Value, snip);
                 }
                 else
                 {
@@ -83,8 +84,8 @@ namespace ZootRP.Strings
                 //if handled by the caller, this should at least rethrow as a properly labeled exception
             }
 
-            // make final expansion match a whole line only (^ is prepended by RegexMatcher)
-            parsedExp = parsedExp + "$";
+            // make final expansion match a whole line only, LAZILY (^ is prepended by RegexMatcher)
+            parsedExp = parsedExp + "$?";
             expressions.Add(identifier, new RegexMatcher(parsedExp));
         }
 
@@ -98,7 +99,7 @@ namespace ZootRP.Strings
             string trim = exp.Trim();
             foreach (var kv in expressions)
             {
-                if (kv.Value.Match(trim) > 0)
+                if (kv.Value.Match(trim) == exp.Length)
                 {
                     return kv.Key;
                 }

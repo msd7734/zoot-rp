@@ -8,6 +8,7 @@ namespace ZootRP.Core
 {
     public enum Comparator
     {
+        Unknown,
         EqualTo,
         GreaterThan,
         LessThan,
@@ -21,14 +22,17 @@ namespace ZootRP.Core
         Or
     }
 
-    public enum PlayerValue
+    public enum ComparablePlayerVal
     {
         Health,
         Endurance,
         Dexterity,
         Charisma,
         Ingenuity,
-        Level
+        Level,
+        Job,
+        Species,
+        Residence
     }
 
     public interface IPrerequesite
