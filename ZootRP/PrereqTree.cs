@@ -13,12 +13,16 @@ namespace ZootRP.Core
     {
         private static TokenDefinition[] tokenDefs = new TokenDefinition[]
         {
-            new TokenDefinition(@"(?i)(health|endurance|dexterity|ingenuity|charisma|level)(?-i)","PLAYER-INT"),
-            new TokenDefinition(@"(?i)(job|species|residence)(?-i)", "PLAYER-STR"),
+            new TokenDefinition(
+                String.Format(@"(?i)({0})(?-i)", String.Join("|", PlayerUtil.ComparableIntValues)),
+                "PLAYER-INT"),
+            new TokenDefinition(
+                String.Format(@"(?i)({0})(?-i)", String.Join("|", PlayerUtil.ComparableStrValues)),
+                "PLAYER-STR"),
             new TokenDefinition(@"=", "EQUALS"),
             new TokenDefinition(@"(<|>|<=|>=|=)", "COMPARATOR"),
             new TokenDefinition(@"[0-9]+", "INTEGER"),
-            new TokenDefinition(@"\"".+\""", "QUOTED-STRING"),
+            new TokenDefinition(@"\"".+?""", "QUOTED-STRING"),
             new TokenDefinition(@"\s*", "SPACE"),
             new TokenDefinition(@"(&&|\|\|)", "LOGIC-BRANCH")
         };
@@ -39,7 +43,8 @@ namespace ZootRP.Core
         private enum ExpressionType
         {
             Unrecognized,
-            COMPARISON,
+            STR_COMPARISON,
+            INT_COMPARISON,
             BRANCH_EXPR,
             MULTI_BRANCH
         }
@@ -55,10 +60,10 @@ namespace ZootRP.Core
             IsValid = Enum.TryParse<ExpressionType>(exprMatch.Replace('-', '_'), out _exprType);
             _rootNode = null;
             _player = player;
-            /*
+            
             if (IsValid)
                 Build(expression.Trim(), new Lexer(new StringReader(trim), tokenDefs));
-            */
+            
         }
 
         public bool IsValid
@@ -67,13 +72,83 @@ namespace ZootRP.Core
             private set;
         }
 
-        /*
+        
         private void Build(string exp, Lexer lexer)
         {
-            if (_exprType == ExpressionType.COMPARISON)
-                _rootNode = BuildComparison(lexer);
+            // consider pulling out lexer or exp to be members...
+
+            if (_exprType == ExpressionType.INT_COMPARISON)
+            {
+                _rootNode = BuildIntcomparison(lexer);
+                Console.WriteLine(_rootNode.Compare());
+            }
+            else if (_exprType == ExpressionType.STR_COMPARISON)
+            {
+                _rootNode = BuildStrComparison(lexer);
+                Console.WriteLine(_rootNode.Compare());
+            }
         }
 
+        private IntCompareNode BuildIntcomparison(Lexer lexer)
+        {
+            var funcs = PlayerUtil.GetIntegerPropertyFuncs(_player);
+            // player-int
+            lexer.Next();
+            PlayerIntegerProperty property = PlayerPropFromString<PlayerIntegerProperty>(lexer.TokenContents);
+
+            // check space
+            lexer.Next();
+            if (lexer.Token.ToString() == "SPACE")
+                lexer.Next();
+
+            // comparison operator
+            Comparator comparison = ComparatorFromString(lexer.TokenContents);
+
+            //check space
+            lexer.Next();
+            if (lexer.Token.ToString() == "SPACE")
+                lexer.Next();
+
+            // integer value to compare to
+            uint compareToVal = UInt32.Parse(lexer.TokenContents);
+
+            return new IntCompareNode(funcs[property](), compareToVal, comparison);
+        }
+
+        private StrCompareNode BuildStrComparison(Lexer lexer)
+        {
+            var funcs = PlayerUtil.GetStringPropertyFuncs(_player);
+
+            // player-string
+            lexer.Next();
+            PlayerStringProperty property = PlayerPropFromString<PlayerStringProperty>(lexer.TokenContents);
+
+            // check space
+            lexer.Next();
+            if (lexer.Token.ToString() == "SPACE")
+                lexer.Next();
+
+            // consume and ignore comparison operator since it's always =
+            Comparator comparison = Comparator.EqualTo;
+
+            //check space
+            lexer.Next();
+            if (lexer.Token.ToString() == "SPACE")
+                lexer.Next();
+
+            // integer value to compare to
+            // extract from between quotes
+            string compareToVal = lexer.TokenContents.Split('\"')[1];
+
+            return new StrCompareNode(funcs[property](), compareToVal);
+        }
+
+        private static T PlayerPropFromString<T>(string str)
+        {
+            return (T) Enum.Parse(typeof(T), str, ignoreCase:true);
+        }
+        
+        /*
         private IPrereqNode BuildComparison(Lexer lexer)
         {
             // player value

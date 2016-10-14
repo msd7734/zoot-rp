@@ -72,9 +72,14 @@ namespace ZootRPTesting
                 false
             );
 
-            // Console.WriteLine(nodeLexicon.MatchExpression(@"health = 12 || endurance > 10 || species = ""ape"""));
-            // Console.WriteLine(nodeLexicon.MatchExpression(@"health = 12 && species = ""bunny"""));
-            Console.WriteLine( nodeLexicon.MatchExpression(@"species = ""bunny"" || species = ""hare"" && health < 50") );
+            //Console.WriteLine(nodeLexicon.MatchExpression(@"health = 12 || endurance > 10 || species = ""ape"""));
+            //Console.WriteLine(nodeLexicon.MatchExpression(@"health = 12 && species = ""bunny"""));
+            //Console.WriteLine(nodeLexicon.MatchExpression(@"species = ""bunny"""));
+
+            PlayerUtil.PrintPlayerStats(p);
+            Console.WriteLine("Species: {0}", p.Character.Species.Name);
+            PrereqTree ptree = new PrereqTree(p, @"species = ""Bunny""");
+
 
             // PrereqTree ptree = new PrereqTree(p, "level >= 10 && dexterity>=25 && health>=35");
 

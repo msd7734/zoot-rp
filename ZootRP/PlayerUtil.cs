@@ -9,8 +9,18 @@ namespace ZootRP.Core
 {
     public enum PlayerStat { Health, Endurance, Dexterity, Ingenuity, Charisma }
 
+    public enum PlayerIntegerProperty { Level, Health, Endurance, Dexterity, Ingenuity, Charisma }
+
+    public enum PlayerStringProperty { Job, Species, Residence }
+
     public static class PlayerUtil
     {
+        public static readonly List<string> ComparableIntValues =
+            Enum.GetNames(typeof(PlayerIntegerProperty)).ToList<string>();
+
+        public static readonly List<string> ComparableStrValues =
+            Enum.GetNames(typeof(PlayerStringProperty)).ToList<string>();
+
         public static Dictionary<PlayerStat, UInt32> GetStatValues(IPlayer player)
         {
             return new Dictionary<PlayerStat, UInt32>()
@@ -32,6 +42,29 @@ namespace ZootRP.Core
                 { PlayerStat.Dexterity, player.GetDexterityProgression() },
                 { PlayerStat.Ingenuity, player.GetIngenuityProgression() },
                 { PlayerStat.Charisma, player.GetCharismaProgression() }
+            };
+        }
+
+        public static Dictionary<PlayerIntegerProperty, Func<uint>> GetIntegerPropertyFuncs(IPlayer player)
+        {
+            return new Dictionary<PlayerIntegerProperty, Func<uint>>()
+            {
+                { PlayerIntegerProperty.Level, () => player.Level },
+                { PlayerIntegerProperty.Health, player.GetHealth },
+                { PlayerIntegerProperty.Endurance, player.GetEndurance },
+                { PlayerIntegerProperty.Dexterity, player.GetDexterity },
+                { PlayerIntegerProperty.Ingenuity, player.GetIngenuity },
+                { PlayerIntegerProperty.Charisma, player.GetCharisma }
+            };
+        }
+
+        public static Dictionary<PlayerStringProperty, Func<string>> GetStringPropertyFuncs(IPlayer player)
+        {
+            return new Dictionary<PlayerStringProperty, Func<string>>()
+            {
+                { PlayerStringProperty.Job, () => player.Job.Name },
+                { PlayerStringProperty.Species, () => player.Character.Species.Name },
+                { PlayerStringProperty.Residence, () => player.Residence.Name }
             };
         }
 

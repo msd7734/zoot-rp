@@ -65,7 +65,7 @@
     <Compile Include="PlayerMutableState.cs" />
     <Compile Include="PlayerUpdateEventArgs.cs" />
     <Compile Include="PlayerUtil.cs" />
-    <Compile Include="PrereqNode.cs" />
+    <Compile Include="IPrereqNode.cs" />
     <Compile Include="PrereqTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StrCompareNode.cs" />
