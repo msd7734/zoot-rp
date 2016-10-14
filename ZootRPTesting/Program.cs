@@ -78,7 +78,7 @@ namespace ZootRPTesting
 
             PlayerUtil.PrintPlayerStats(p);
             Console.WriteLine("Species: {0}", p.Character.Species.Name);
-            PrereqTree ptree = new PrereqTree(p, @"species = ""Bunny""");
+            PrereqTree ptree = new PrereqTree(p, "level=1");
 
 
             // PrereqTree ptree = new PrereqTree(p, "level >= 10 && dexterity>=25 && health>=35");

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Text.RegularExpressions;
 
 using ZootRP.Strings;
 
@@ -27,13 +28,18 @@ namespace ZootRP.Core
             new TokenDefinition(@"(&&|\|\|)", "LOGIC-BRANCH")
         };
 
+        // Static due to potential high frequency of calling on logic branches
+        private static Regex LogicBranchPattern = new Regex(
+            tokenDefs.First(x => x.Token.ToString() == "LOGIC-BRANCH").Matcher.ToString().Substring(1)
+        );
+
         private static Lexicon nodeLexicon = new Lexicon(
             tokenDefs,
             new Dictionary<string, string>
             { 
                 { "STR-COMPARISON", "[[PLAYER-STR]][[SPACE]]=[[SPACE]][[QUOTED-STRING]]"},
                 { "INT-COMPARISON", "[[PLAYER-INT]][[SPACE]][[COMPARATOR]][[SPACE]][[INTEGER]]"},
-                { "COMPARISON", "([[STR-COMPARISON]] | [[INT-COMPARISON]])" },
+                { "COMPARISON", "(([[STR-COMPARISON]])|([[INT-COMPARISON]]))" },
                 { "BRANCH-EXPR", "[[COMPARISON]][[SPACE]][[LOGIC-BRANCH]][[SPACE]][[COMPARISON]]" },
                 { "MULTI-BRANCH", "[[BRANCH-EXPR]][[SPACE]]([[LOGIC-BRANCH]][[SPACE]][[COMPARISON]])+"}
             },
@@ -57,12 +63,20 @@ namespace ZootRP.Core
         {
             string trim = expression.Trim();
             string exprMatch = nodeLexicon.MatchExpression(trim);
-            IsValid = Enum.TryParse<ExpressionType>(exprMatch.Replace('-', '_'), out _exprType);
+            _exprType = ExpressionTypeFromString(exprMatch);
+            IsValid = (_exprType != ExpressionType.Unrecognized);
             _rootNode = null;
             _player = player;
-            
+
             if (IsValid)
-                Build(expression.Trim(), new Lexer(new StringReader(trim), tokenDefs));
+            {
+                _rootNode = Build(trim, new Lexer(new StringReader(trim), tokenDefs), _exprType);
+                Console.WriteLine(_rootNode.Compare());
+            }
+            else
+            {
+                Console.WriteLine("Invalid expression");
+            }
             
         }
 
@@ -73,20 +87,36 @@ namespace ZootRP.Core
         }
 
         
-        private void Build(string exp, Lexer lexer)
+        private IPrereqNode Build(string exp, Lexer lexer, ExpressionType exprType)
         {
             // consider pulling out lexer or exp to be members...
 
-            if (_exprType == ExpressionType.INT_COMPARISON)
+            if (exprType == ExpressionType.INT_COMPARISON)
             {
-                _rootNode = BuildIntcomparison(lexer);
-                Console.WriteLine(_rootNode.Compare());
+                return BuildIntcomparison(lexer);
             }
-            else if (_exprType == ExpressionType.STR_COMPARISON)
+            else if (exprType == ExpressionType.STR_COMPARISON)
             {
-                _rootNode = BuildStrComparison(lexer);
-                Console.WriteLine(_rootNode.Compare());
+                return BuildStrComparison(lexer);
             }
+            else if (exprType == ExpressionType.BRANCH_EXPR)
+            {
+                return BuildBranch(exp, lexer);
+            }
+            return null;
+        }
+
+        private LogicBranchNode BuildBranch(string exp, Lexer lexer)
+        {
+            string branchSymbol = LogicBranchPattern.Match(exp).Value;
+            string[] comparisons = exp.Split(new string[]{branchSymbol}, StringSplitOptions.RemoveEmptyEntries);
+            string l = comparisons[0].Trim();
+            ExpressionType leftExprType = ExpressionTypeFromString(nodeLexicon.MatchExpression(l));
+            string r = comparisons[1].Trim();
+            ExpressionType rightExprType = ExpressionTypeFromString(nodeLexicon.MatchExpression(r));
+            IPrereqNode leftCompare = Build(l, new Lexer(new StringReader(l), tokenDefs), leftExprType);
+            IPrereqNode rightCompare = Build(r, new Lexer(new StringReader(r), tokenDefs), rightExprType);
+            return new LogicBranchNode(leftCompare, rightCompare, LogicalOperatorFromString(branchSymbol));
         }
 
         private IntCompareNode BuildIntcomparison(Lexer lexer)
@@ -129,7 +159,7 @@ namespace ZootRP.Core
                 lexer.Next();
 
             // consume and ignore comparison operator since it's always =
-            Comparator comparison = Comparator.EqualTo;
+            // StrCompareNode doesn't need it anyway
 
             //check space
             lexer.Next();
@@ -141,6 +171,13 @@ namespace ZootRP.Core
             string compareToVal = lexer.TokenContents.Split('\"')[1];
 
             return new StrCompareNode(funcs[property](), compareToVal);
+        }
+
+        private static ExpressionType ExpressionTypeFromString(string str)
+        {
+            ExpressionType res = ExpressionType.Unrecognized;
+            Enum.TryParse<ExpressionType>(str.Replace('-', '_'), out res);
+            return res;
         }
 
         private static T PlayerPropFromString<T>(string str)
@@ -187,6 +224,19 @@ namespace ZootRP.Core
                     return Comparator.EqualTo;
                 default:
                     return Comparator.Unknown;
+            }
+        }
+
+        private static LogicalOperator LogicalOperatorFromString(string s)
+        {
+            switch (s)
+            {
+                case "||":
+                    return LogicalOperator.Or;
+                case "&&":
+                    return LogicalOperator.And;
+                default:
+                    return LogicalOperator.Unknown;
             }
         }
     }

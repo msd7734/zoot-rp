@@ -18,6 +18,7 @@ namespace ZootRP.Core
 
     public enum LogicalOperator
     {
+        Unknown,
         And,
         Or
     }
