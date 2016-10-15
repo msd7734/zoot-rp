@@ -7,6 +7,12 @@ using System.Text.RegularExpressions;
 
 namespace ZootRP.Strings
 {
+    /// <summary>
+    /// Stores a list of regex-containing token patterns, and also allows for the creation
+    ///     of expressions - regex patterns that conntain token expansions.
+    /// Together, tokens and expressions define a langauge. The Lexicon can check a string
+    ///     to see if it is in the Lexicon's langauge.
+    /// </summary>
     public class Lexicon
     {
         private static readonly Regex replToken = new Regex(@"(\[\[.+?\]\])");
@@ -14,6 +20,11 @@ namespace ZootRP.Strings
         private Dictionary<string, IMatcher> tokens;
         private Dictionary<string, IMatcher> expressions;
 
+        /// <summary>
+        /// Create a Lexicon.
+        /// </summary>
+        /// <param name="defs">The valid tokens in this language.</param>
+        /// <param name="tokenIsExpression">Whether to treat each token as valid string in this lexicon's langauge.</param>
         public Lexicon(TokenDefinition[] defs, bool tokenIsExpression = true)
         {
             tokens = new Dictionary<string, IMatcher>(defs.Length);
@@ -27,6 +38,12 @@ namespace ZootRP.Strings
             }
         }
 
+        /// <summary>
+        /// Create a Lexicon.
+        /// </summary>
+        /// <param name="defs">The valid tokens in this language.</param>
+        /// <param name="expressions">The expressions which define vallid strings in the lexicon's language. <see cref="Lexicon.DefineExpression"/></param>
+        /// <param name="tokenIsExpression">Whether to treat each token as valid string in this lexicon's langauge.</param>
         public Lexicon(TokenDefinition[] defs, Dictionary<string, string> expressions,
             bool tokenIsExpression = true)
         {
@@ -47,6 +64,14 @@ namespace ZootRP.Strings
             }
         }
 
+        /// <summary>
+        /// Define an expression in this lexicon.
+        /// </summary>
+        /// <param name="exp">
+        ///     The unexpanded expression string. This string is a regular expression, where values in [[double-backets]]
+        ///     are expanded into matching token regular expressions.
+        /// </param>
+        /// <param name="identifier">A unique string that identifies the expression.</param>
         public void DefineExpression(string exp, string identifier)
         {
             var foundTokens = replToken.Matches(exp);
@@ -89,11 +114,21 @@ namespace ZootRP.Strings
             expressions.Add(identifier, new RegexMatcher(parsedExp));
         }
 
+        /// <summary>
+        /// Check if a string is in this lexicon's language.
+        /// </summary>
+        /// <param name="exp">The expression to check.</param>
+        /// <returns>True if <c>exp</c> is in the lexicon, false otherwise.</returns>
         public bool InLexicon(string exp)
         {
             return !(String.IsNullOrEmpty(MatchExpression(exp)));
         }
 
+        /// <summary>
+        /// Get the identifier of an expression in this lexicon which matches a given string.
+        /// </summary>
+        /// <param name="exp">The string to attempt to match.</param>
+        /// <returns>A string identifier representing an expression in the lexicon.</returns>
         public string MatchExpression(string exp)
         {
             string trim = exp.Trim();
