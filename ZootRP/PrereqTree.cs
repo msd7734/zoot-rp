@@ -29,6 +29,7 @@ namespace ZootRP.Core
         };
 
         // Static due to potential high frequency of calling on logic branches
+        // make sure to clip off added ^
         private static Regex LogicBranchPattern = new Regex(
             tokenDefs.First(x => x.Token.ToString() == "LOGIC-BRANCH").Matcher.ToString().Substring(1)
         );
@@ -41,7 +42,7 @@ namespace ZootRP.Core
                 { "INT-COMPARISON", "[[PLAYER-INT]][[SPACE]][[COMPARATOR]][[SPACE]][[INTEGER]]"},
                 { "COMPARISON", "(([[STR-COMPARISON]])|([[INT-COMPARISON]]))" },
                 { "BRANCH-EXPR", "[[COMPARISON]][[SPACE]][[LOGIC-BRANCH]][[SPACE]][[COMPARISON]]" },
-                { "MULTI-BRANCH", "[[BRANCH-EXPR]][[SPACE]]([[LOGIC-BRANCH]][[SPACE]][[COMPARISON]])+"}
+                { "MULTI-BRANCH", "[[BRANCH-EXPR]][[SPACE]]([[LOGIC-BRANCH]][[SPACE]][[COMPARISON]][[SPACE]])+"}
             },
             false
         );
@@ -70,12 +71,8 @@ namespace ZootRP.Core
 
             if (IsValid)
             {
+                // Build underlying node structure
                 _rootNode = Build(trim, new Lexer(new StringReader(trim), tokenDefs), _exprType);
-                Console.WriteLine(_rootNode.Compare());
-            }
-            else
-            {
-                Console.WriteLine("Invalid expression");
             }
             
         }
@@ -86,23 +83,70 @@ namespace ZootRP.Core
             private set;
         }
 
+        public IPrereqNode GetRoot()
+        {
+            return _rootNode;
+        }
+
+        public bool IsMet()
+        {
+            // probably don't just return false here since that would imply the tree is good
+            // caller should check IsValid before calling or handle NullRefException
+            return _rootNode.Compare();
+        }
         
         private IPrereqNode Build(string exp, Lexer lexer, ExpressionType exprType)
         {
-            // consider pulling out lexer or exp to be members...
+            switch (exprType)
+            {
+                case ExpressionType.INT_COMPARISON:
+                    return BuildIntComparison(lexer);
+                case ExpressionType.STR_COMPARISON:
+                    return BuildStrComparison(lexer);
+                case ExpressionType.BRANCH_EXPR:
+                    return BuildBranch(exp, lexer);
+                case ExpressionType.MULTI_BRANCH:
+                    return BuildMultiBranch(exp, lexer);
+                default:
+                    return null;
+            }
+        }
 
-            if (exprType == ExpressionType.INT_COMPARISON)
+        private LogicBranchNode BuildMultiBranch(string exp, Lexer lexer)
+        {
+            // parse entire expression from left->right
+            // so in a multi-branch of 2 branches (degree 3):
+            //             [Branch]
+            //            /        \
+            //   [Comparison]    [Branch]
+            //                  /       \
+            //           [Comparison]  [Comparison]                 
+            // 
+            //
+
+            string subExpr = String.Empty;
+            ExpressionType subExprType = ExpressionType.Unrecognized;
+
+            while (lexer.Next())
             {
-                return BuildIntcomparison(lexer);
+                subExpr += lexer.TokenContents;
+                subExprType = ExpressionTypeFromString(nodeLexicon.MatchExpression(subExpr));
+                if (subExprType == ExpressionType.INT_COMPARISON || subExprType == ExpressionType.STR_COMPARISON)
+                {
+                    IPrereqNode left = Build(subExpr, new Lexer(new StringReader(subExpr), tokenDefs), subExprType);
+
+                    // consume the branch symbol and any space before passing the rest on to a subtree
+                    lexer.Next();
+                    if (lexer.Token.ToString() == "SPACE")
+                        lexer.Next();
+
+                    string theRest = exp.Substring(lexer.Position);
+                    IPrereqNode right = new PrereqTree(_player, theRest).GetRoot();
+                    string branchSymbol = LogicBranchPattern.Match(exp).Value;
+                    return new LogicBranchNode(left, right, LogicalOperatorFromString(branchSymbol));
+                }
             }
-            else if (exprType == ExpressionType.STR_COMPARISON)
-            {
-                return BuildStrComparison(lexer);
-            }
-            else if (exprType == ExpressionType.BRANCH_EXPR)
-            {
-                return BuildBranch(exp, lexer);
-            }
+
             return null;
         }
 
@@ -119,7 +163,7 @@ namespace ZootRP.Core
             return new LogicBranchNode(leftCompare, rightCompare, LogicalOperatorFromString(branchSymbol));
         }
 
-        private IntCompareNode BuildIntcomparison(Lexer lexer)
+        private IntCompareNode BuildIntComparison(Lexer lexer)
         {
             var funcs = PlayerUtil.GetIntegerPropertyFuncs(_player);
             // player-int
