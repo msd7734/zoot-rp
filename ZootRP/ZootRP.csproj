@@ -46,12 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompareNode.cs" />
+    <Compile Include="Prereq\CompareNode.cs" />
     <Compile Include="IActivity.cs" />
     <Compile Include="ICharacter.cs" />
     <Compile Include="IJob.cs" />
     <Compile Include="ILocation.cs" />
-    <Compile Include="IntCompareNode.cs" />
+    <Compile Include="Prereq\IntCompareNode.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="IPlayerIdentifier.cs" />
     <Compile Include="IPrerequesite.cs" />
@@ -61,14 +61,14 @@
     <Compile Include="ISpecies.cs" />
     <Compile Include="Lexer.cs" />
     <Compile Include="Lexicon.cs" />
-    <Compile Include="LogicBranchNode.cs" />
+    <Compile Include="Prereq\LogicBranchNode.cs" />
     <Compile Include="PlayerMutableState.cs" />
     <Compile Include="PlayerUpdateEventArgs.cs" />
     <Compile Include="PlayerUtil.cs" />
-    <Compile Include="IPrereqNode.cs" />
-    <Compile Include="PrereqTree.cs" />
+    <Compile Include="Prereq\IPrereqNode.cs" />
+    <Compile Include="Prereq\PrereqTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StrCompareNode.cs" />
+    <Compile Include="Prereq\StrCompareNode.cs" />
     <Compile Include="TokenDefinition.cs" />
   </ItemGroup>
   <ItemGroup>

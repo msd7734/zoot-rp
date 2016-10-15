@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ZootRP.Core.Prereq
 {
+    /// <summary>
+    /// The leaf node of a PrereqTree, this is a concretely evaluatable node.
+    /// </summary>
     public class CompareNode : IPrereqNode
     {
 

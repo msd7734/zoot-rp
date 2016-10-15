@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ZootRP.Core.Prereq
 {
+    /// <summary>
+    /// A branch node, created due to a logical branch AND or OR.
+    /// </summary>
     public class LogicBranchNode : IPrereqNode
     {
         private IPrereqNode left, right;
