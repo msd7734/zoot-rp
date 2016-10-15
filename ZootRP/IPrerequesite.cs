@@ -23,19 +23,6 @@ namespace ZootRP.Core
         Or
     }
 
-    public enum ComparablePlayerVal
-    {
-        Health,
-        Endurance,
-        Dexterity,
-        Charisma,
-        Ingenuity,
-        Level,
-        Job,
-        Species,
-        Residence
-    }
-
     public interface IPrerequesite
     {
 

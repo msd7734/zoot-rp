@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZootRP.Core
+namespace ZootRP.Core.Prereq
 {
     public class CompareNode : IPrereqNode
     {

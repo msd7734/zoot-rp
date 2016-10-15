@@ -8,8 +8,14 @@ using System.Text.RegularExpressions;
 
 using ZootRP.Strings;
 
-namespace ZootRP.Core
+namespace ZootRP.Core.Prereq
 {
+    /// <summary>
+    /// Parse and evaluate prerequesite strings to compare properties of IPlayer with given values.
+    /// Essentially, given a player and a string like "level >= 10 && endurance >= 20 && species="Fox"",
+    /// evaluate whether the player meets that prerequesite. Guaranteed to handle IPlayer properties
+    /// as defined in PlayerIntegerProperty and PlayerStringProperty.
+    /// </summary>
     public class PrereqTree
     {
         private static TokenDefinition[] tokenDefs = new TokenDefinition[]
@@ -60,6 +66,11 @@ namespace ZootRP.Core
         private ExpressionType _exprType;
         private IPlayer _player;
 
+        /// <summary>
+        /// Construct and evaluate a PrereqTree.
+        /// </summary>
+        /// <param name="player">The player to check the prerequesites for.</param>
+        /// <param name="expression">The expression representing the prerequesite.</param>
         public PrereqTree(IPlayer player, string expression)
         {
             string trim = expression.Trim();
@@ -77,17 +88,29 @@ namespace ZootRP.Core
             
         }
 
+        /// <summary>
+        /// Whether a valid tree could be built from the expression given to the PrereqTree constructor.
+        /// </summary>
         public bool IsValid
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Get the root node of the tree.
+        /// </summary>
+        /// <returns>An evaluatable IPrereqNode or null if the tree is in an invalid state.</returns>
         public IPrereqNode GetRoot()
         {
             return _rootNode;
         }
 
+        /// <summary>
+        /// Whether the prerequesite defined by this tree is met by the given player.
+        /// </summary>
+        /// <exception cref="System.NullReferenceException">If there is no valid node to evaluate in the tree.</exception>
+        /// <returns>True if the player fulfills the prerequesite, false otherwise.</returns>
         public bool IsMet()
         {
             // probably don't just return false here since that would imply the tree is good
@@ -115,6 +138,7 @@ namespace ZootRP.Core
         private LogicBranchNode BuildMultiBranch(string exp, Lexer lexer)
         {
             // parse entire expression from left->right
+            // since the underlying implementation is just C# logical comparisons, we can "cheat" this way :^)
             // so in a multi-branch of 2 branches (degree 3):
             //             [Branch]
             //            /        \
@@ -228,29 +252,6 @@ namespace ZootRP.Core
         {
             return (T) Enum.Parse(typeof(T), str, ignoreCase:true);
         }
-        
-        /*
-        private IPrereqNode BuildComparison(Lexer lexer)
-        {
-            // player value
-            lexer.Next();
-            ComparablePlayerVal pval = (ComparablePlayerVal) Enum.Parse(typeof(ComparablePlayerVal), lexer.TokenContents, true);
-
-            // comparison operator
-            lexer.Next();
-            if (lexer.Token.ToString() == "SPACE")
-                lexer.Next();
-            Comparator compare = ComparatorFromString(lexer.TokenContents);
-
-            // numerical value
-            lexer.Next();
-            if (lexer.Token.ToString() == "SPACE")
-                lexer.Next();
-            ulong val = ulong.Parse(lexer.TokenContents);
-
-            return new IPrereqNode(pval, compare, val);
-        }
-        */
 
         private static Comparator ComparatorFromString(string s)
         {

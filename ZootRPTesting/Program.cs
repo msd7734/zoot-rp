@@ -8,6 +8,7 @@ using System.IO;
 using MathNet.Numerics;
 
 using ZootRP.Core;
+using ZootRP.Core.Prereq;
 using ZootRP.Strings;
 
 namespace ZootRPTesting
@@ -47,42 +48,10 @@ namespace ZootRPTesting
             p.LevelUpEvent += ReportLevelUp;
             p.RewardEvent += ReportReward;
 
-            TokenDefinition[] tokenDefs = new TokenDefinition[]
-            {
-                new TokenDefinition(@"(?i)(health|endurance|dexterity|ingenuity|charisma|level)(?-i)","PLAYER-INT"),
-                new TokenDefinition(@"(?i)(job|species|residence)(?-i)", "PLAYER-STR"),
-                new TokenDefinition(@"=", "EQUALS"),
-                new TokenDefinition(@"(<|>|<=|>=|=)", "COMPARATOR"),
-                new TokenDefinition(@"[0-9]+", "INTEGER"),
-                new TokenDefinition(@"\"".+?\""", "QUOTED-STRING"),
-                new TokenDefinition(@"\s*", "SPACE"),
-                new TokenDefinition(@"(&&|\|\|)", "LOGIC-BRANCH")
-            };
-
-            Lexicon nodeLexicon = new Lexicon(
-                tokenDefs,
-                new Dictionary<string, string>
-                { 
-                    { "STR-COMPARISON", "[[PLAYER-STR]][[SPACE]]=[[SPACE]][[QUOTED-STRING]]" },
-                    { "INT-COMPARISON", "[[PLAYER-INT]][[SPACE]][[COMPARATOR]][[SPACE]][[INTEGER]]" },
-                    { "COMPARISON", "(([[STR-COMPARISON]])|([[INT-COMPARISON]]))" },
-                    { "BRANCH-EXPR", "[[COMPARISON]][[SPACE]][[LOGIC-BRANCH]][[SPACE]][[COMPARISON]]" },
-                    { "MULTI-BRANCH", "[[BRANCH-EXPR]]([[SPACE]][[LOGIC-BRANCH]][[SPACE]][[COMPARISON]])+" }
-                },
-                false
-            );
-
-            //Console.WriteLine(nodeLexicon.MatchExpression(@"health = 12 || endurance > 10 || species = ""ape"""));
-            //Console.WriteLine(nodeLexicon.MatchExpression(@"health = 12 && species = ""bunny"""));
-            //Console.WriteLine(nodeLexicon.MatchExpression(@"species = ""bunny"""));
-
             PlayerUtil.PrintPlayerStats(p);
             Console.WriteLine("Species: {0}", p.Character.Species.Name);
             PrereqTree ptree = new PrereqTree(p, @"level > 5 || health > 5 && species>=""Bunny""");
-
-
-            // PrereqTree ptree = new PrereqTree(p, "level >= 10 && dexterity>=25 && health>=35");
-
+            
             /*
             PrereqTree ptree = new PrereqTree("dexterity< 12");
             PrereqTree ptree2 = new PrereqTree("health >= 10 && charisma >= 20");
