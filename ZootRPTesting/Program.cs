@@ -11,6 +11,9 @@ using ZootRP.Core;
 using ZootRP.Core.Prereq;
 using ZootRP.Strings;
 
+using NCrontab;
+using ScheduleWidget.ScheduledEvents;
+
 namespace ZootRPTesting
 {
     class Program
@@ -48,11 +51,16 @@ namespace ZootRPTesting
             p.LevelUpEvent += ReportLevelUp;
             p.RewardEvent += ReportReward;
 
+            TimePrerequisite tp = new TimePrerequisite("* * * * *", TimeFrequency.PerDay);
+            Console.WriteLine(tp.PlayerMeets(p));
+
+            /*
             PlayerUtil.PrintPlayerStats(p);
             Console.WriteLine("Species: {0}", p.Character.Species.Name);
             PrereqTree ptree = new PrereqTree(p, @"level > 5 || health > 5 && species=""Bunny""");
             Console.WriteLine(ptree.IsMet());
-            
+            */
+
             /*
             PrereqTree ptree = new PrereqTree("dexterity< 12");
             PrereqTree ptree2 = new PrereqTree("health >= 10 && charisma >= 20");

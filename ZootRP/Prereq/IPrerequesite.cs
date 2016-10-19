@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZootRP.Core
+namespace ZootRP.Core.Prereq
 {
     public enum Comparator
     {
@@ -23,8 +23,11 @@ namespace ZootRP.Core
         Or
     }
 
-    public interface IPrerequesite
+    public interface IPrerequisite
     {
+        string Value { get; }
 
+        bool PlayerMeets(IPlayer player);
+        // what should be responsible for checking whether a given player meets the prereq?
     }
 }

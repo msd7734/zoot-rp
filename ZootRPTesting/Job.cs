@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ZootRP.Core;
+using ZootRP.Core.Prereq;
 
 namespace ZootRPTesting
 {
@@ -25,6 +26,12 @@ namespace ZootRPTesting
         public IReward Work(IPlayer player)
         {
             throw new NotImplementedException();
+        }
+
+
+        public IPrerequisite Prerequesite
+        {
+            get { throw new NotImplementedException(); }
         }
     }
 }
