@@ -51,8 +51,14 @@ namespace ZootRPTesting
             p.LevelUpEvent += ReportLevelUp;
             p.RewardEvent += ReportReward;
 
-            TimePrerequisite tp = new TimePrerequisite("* * * * *", TimeFrequency.PerDay);
-            Console.WriteLine(tp.PlayerMeets(p));
+
+            //var statType = p.GetType().GetMethod("GetHealth").ReturnType;
+            //dynamic health = Convert.ChangeType(p.GetType().GetMethod("GetHealth").Invoke(p, null), statType);
+            //Console.WriteLine(health);
+            //Console.WriteLine(health + 10);
+
+            // TimePrerequisite tp = new TimePrerequisite("* * * * *", TimeFrequency.PerDay);
+            // Console.WriteLine(tp.PlayerMeets(p));
 
             /*
             PlayerUtil.PrintPlayerStats(p);
